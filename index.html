@@ -266,7 +266,7 @@
 <script>
 // ── Config ──────────────────────────────────────────────────────────────────
 // Replace with your actual Railway API URL after deploying
-const API_BASE = (window.API_BASE || "https://sturdy-waddle-production-877b.up.railway.app");
+const API_BASE = window.API_BASE || localStorage.getItem("apiBase") || "";
 const USD_ETB  = 135;
 
 // ── Telegram Web App ─────────────────────────────────────────────────────────
@@ -548,10 +548,44 @@ function showToast(msg, type='success') {
 init();
 setInterval(fetchRates, 300000);
 </script>
+
+<script>
+// Setup: ask for Railway URL if not set
+(function(){
+  const stored = localStorage.getItem('apiBase');
+  if (!stored || stored === '') {
+    const url = prompt('Enter your Railway API URL:
+(e.g. https://sturdy-waddle-production.up.railway.app)
+
+Leave empty to skip for now:');
+    if (url && url.trim()) {
+      localStorage.setItem('apiBase', url.trim().replace(/\/$/, ''));
+      window.location.reload();
+    }
+  }
+})();
+</script>
 </body>
 </html>
 <script>
-// Inject wallet page before </body>
+// Inject wallet page before 
+<script>
+// Setup: ask for Railway URL if not set
+(function(){
+  const stored = localStorage.getItem('apiBase');
+  if (!stored || stored === '') {
+    const url = prompt('Enter your Railway API URL:
+(e.g. https://sturdy-waddle-production.up.railway.app)
+
+Leave empty to skip for now:');
+    if (url && url.trim()) {
+      localStorage.setItem('apiBase', url.trim().replace(/\/$/, ''));
+      window.location.reload();
+    }
+  }
+})();
+</script>
+</body>
 const walletHTML = `
 <div class="page" id="page-wallet" style="display:none;padding:20px;position:relative;z-index:1">
   <div style="background:linear-gradient(135deg,#0d1f2e,#0f2a1e);border:1px solid rgba(0,229,160,0.15);border-radius:16px;padding:20px;margin-bottom:20px">
