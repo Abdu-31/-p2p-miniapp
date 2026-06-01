@@ -8,155 +8,573 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg:#080c14; --surface:#0f1520; --card:#141d2b; --card2:#1a2538;
-    --border:rgba(255,255,255,0.06); --accent:#00e5a0; --accent2:#f5a623;
-    --accent3:#e74c3c; --accent4:#4a9eff; --text:#f0f4ff;
-    --muted:#5a7090; --muted2:#8aa0b8; --green:#00e5a0; --red:#ff4d6d;
+    --bg: #080c14;
+    --surface: #0f1520;
+    --card: #141d2b;
+    --card2: #1a2538;
+    --border: rgba(255,255,255,0.06);
+    --accent: #00e5a0;
+    --accent2: #f5a623;
+    --accent3: #e74c3c;
+    --accent4: #4a9eff;
+    --text: #f0f4ff;
+    --muted: #5a7090;
+    --muted2: #8aa0b8;
+    --green: #00e5a0;
+    --red: #ff4d6d;
   }
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{background:var(--bg);font-family:'Space Grotesk',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:80px}
-  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 20% 0%,rgba(0,229,160,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(74,158,255,0.05) 0%,transparent 60%);pointer-events:none;z-index:0}
-  .header{position:sticky;top:0;z-index:100;background:rgba(8,12,20,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-  .header-left{display:flex;align-items:center;gap:10px}
-  .header-logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00a870);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#000}
-  .header-title{font-size:15px;font-weight:700;letter-spacing:-0.3px}
-  .header-sub{font-size:10px;color:var(--muted2);margin-top:1px}
-  .header-badge{background:rgba(0,229,160,0.12);border:1px solid rgba(0,229,160,0.25);color:var(--accent);font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;letter-spacing:0.5px}
-  .page{display:none;padding:20px;position:relative;z-index:1}
-  .page.active{display:block;animation:fadeIn 0.3s ease}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-  .nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(8,12,20,0.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(6,1fr);padding:8px 0 12px}
-  .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;font-size:9px;font-weight:600;letter-spacing:0.5px;color:var(--muted);transition:color 0.2s;cursor:pointer;text-transform:uppercase}
-  .nav-item .nav-icon{font-size:20px;transition:transform 0.2s}
-  .nav-item.active{color:var(--accent)}
-  .nav-item.active .nav-icon{transform:scale(1.15)}
-  .section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-  .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
-  .welcome-bar{background:linear-gradient(135deg,#0d1f2e,#0f2a1e);border:1px solid rgba(0,229,160,0.15);border-radius:16px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden}
-  .welcome-bar::before{content:'🇪🇹';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:48px;opacity:0.15}
-  .welcome-name{font-size:20px;font-weight:700;margin-bottom:4px}
-  .welcome-id{font-size:11px;color:var(--muted2);font-family:monospace}
-  .welcome-tier{display:inline-flex;align-items:center;gap:5px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.2);color:var(--accent);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:10px}
-  .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
-  .stat-label{font-size:10px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
-  .stat-value{font-family:'Bebas Neue';font-size:32px;line-height:1;letter-spacing:1px}
-  .stat-value.green{color:var(--green)} .stat-value.yellow{color:var(--accent2)} .stat-value.blue{color:var(--accent4)} .stat-value.red{color:var(--red)}
-  .stat-sub{font-size:10px;color:var(--muted);margin-top:4px}
-  .rates-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px}
-  .rate-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
-  .rate-row:last-child{border-bottom:none}
-  .rate-coin{display:flex;align-items:center;gap:10px}
-  .coin-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px}
-  .coin-name{font-weight:600;font-size:14px} .coin-sym{font-size:10px;color:var(--muted2)}
-  .rate-price{text-align:right} .rate-etb{font-weight:700;font-size:14px}
-  .rate-change{font-size:10px;margin-top:2px} .rate-change.up{color:var(--green)} .rate-change.down{color:var(--red)}
-  .trade-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;cursor:pointer}
-  .trade-card.sell{border-left:3px solid var(--red)} .trade-card.buy{border-left:3px solid var(--green)}
-  .trade-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .trade-type-badge{font-size:10px;font-weight:700;letter-spacing:1px;padding:3px 10px;border-radius:20px}
-  .trade-type-badge.sell{background:rgba(255,77,109,0.12);border:1px solid rgba(255,77,109,0.3);color:var(--red)}
-  .trade-type-badge.buy{background:rgba(0,229,160,0.12);border:1px solid rgba(0,229,160,0.3);color:var(--green)}
-  .trade-ref{font-size:10px;color:var(--muted);font-family:monospace}
-  .trade-main{display:flex;align-items:baseline;gap:6px;margin-bottom:8px}
-  .trade-amount{font-family:'Bebas Neue';font-size:28px;letter-spacing:1px}
-  .trade-coin{font-size:14px;font-weight:600;color:var(--muted2)}
-  .trade-rate{font-size:12px;color:var(--muted2)} .trade-rate span{color:var(--accent2);font-weight:600}
-  .trade-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-  .meta-chip{font-size:10px;font-weight:500;background:var(--card2);border:1px solid var(--border);padding:3px 8px;border-radius:6px;color:var(--muted2)}
-  .trade-footer{display:flex;align-items:center;justify-content:space-between}
-  .trader-info{display:flex;align-items:center;gap:8px}
-  .trader-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent4),var(--accent));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000}
-  .trader-name{font-size:12px;font-weight:600} .trader-rating{font-size:10px;color:var(--accent2)}
-  .trade-btn{background:linear-gradient(135deg,var(--accent),#00c882);color:#000;font-weight:700;font-size:12px;padding:8px 16px;border-radius:10px;border:none;cursor:pointer}
-  .trade-btn.red{background:linear-gradient(135deg,var(--red),#c0392b);color:#fff}
-  .filter-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;margin-bottom:16px;scrollbar-width:none}
-  .filter-bar::-webkit-scrollbar{display:none}
-  .filter-chip{flex-shrink:0;background:var(--card);border:1px solid var(--border);color:var(--muted2);font-size:11px;font-weight:600;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all 0.15s;white-space:nowrap}
-  .filter-chip.active{background:rgba(0,229,160,0.12);border-color:rgba(0,229,160,0.4);color:var(--accent)}
-  .type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
-  .type-btn{padding:14px;border-radius:12px;border:2px solid var(--border);background:var(--card);color:var(--muted2);font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;text-align:center}
-  .type-btn.active.buy{border-color:var(--green);background:rgba(0,229,160,0.1);color:var(--green)}
-  .type-btn.active.sell{border-color:var(--red);background:rgba(255,77,109,0.1);color:var(--red)}
-  .coin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
-  .coin-btn{padding:12px 8px;border-radius:12px;border:2px solid var(--border);background:var(--card);color:var(--muted2);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;text-align:center}
-  .coin-btn .cb-icon{font-size:20px;display:block;margin-bottom:4px}
-  .coin-btn.active{border-color:var(--accent4);background:rgba(74,158,255,0.1);color:var(--accent4)}
-  .input-group{margin-bottom:16px}
-  .form-label{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted2);text-transform:uppercase;margin-bottom:8px;display:block}
-  .input-field{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;color:var(--text);font-size:16px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
-  .input-field:focus{border-color:rgba(0,229,160,0.4)}
-  .input-hint{font-size:10px;color:var(--muted);margin-top:6px} .input-hint span{color:var(--accent2);font-weight:600}
-  .payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
-  .pm-btn{padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--card);color:var(--muted2);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;text-align:center}
-  .pm-btn.active{border-color:var(--accent2);background:rgba(245,166,35,0.1);color:var(--accent2)}
-  .submit-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent),#00c882);color:#000;font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;letter-spacing:0.5px;font-family:'Space Grotesk',sans-serif}
-  .profile-header{background:linear-gradient(135deg,#0d1f35,#0a1f15);border:1px solid rgba(74,158,255,0.15);border-radius:16px;padding:24px 20px;text-align:center;margin-bottom:20px}
-  .profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent4),var(--accent));display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#000;margin:0 auto 12px;border:3px solid rgba(255,255,255,0.1)}
-  .profile-name{font-size:22px;font-weight:700;margin-bottom:4px}
-  .profile-id{font-size:11px;color:var(--muted2);font-family:monospace;margin-bottom:12px}
-  .profile-tier{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:var(--accent2);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px}
-  .stars{color:var(--accent2);font-size:14px;margin-top:10px;letter-spacing:2px}
-  .profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-  .ps-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center}
-  .ps-val{font-family:'Bebas Neue';font-size:28px;color:var(--accent)}
-  .ps-label{font-size:9px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-  .history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
-  .hi-left{display:flex;align-items:center;gap:12px}
-  .hi-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-  .hi-ref{font-size:11px;font-weight:600} .hi-date{font-size:10px;color:var(--muted);margin-top:2px}
-  .hi-amount{font-weight:700;font-size:14px;text-align:right} .hi-etb{font-size:10px;color:var(--muted2);margin-top:2px}
-  .modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);align-items:flex-end}
-  .modal-overlay.open{display:flex;animation:modalIn 0.3s ease}
-  @keyframes modalIn{from{opacity:0}to{opacity:1}}
-  .modal{background:var(--surface);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;animation:slideUp 0.3s ease}
-  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .modal-handle{width:40px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 20px}
-  .modal-title{font-size:18px;font-weight:700;margin-bottom:16px}
-  .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all 0.3s;white-space:nowrap}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  .toast.success{border-color:rgba(0,229,160,0.4);color:var(--green)} .toast.error{border-color:rgba(255,77,109,0.4);color:var(--red)}
-  .loading{text-align:center;padding:40px;color:var(--muted)}
-  .loading-spinner{font-size:32px;animation:spin 1s linear infinite;display:block;margin-bottom:12px}
-  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-  .empty-state{text-align:center;padding:40px;color:var(--muted)}
-  .empty-state .empty-icon{font-size:48px;display:block;margin-bottom:12px;opacity:0.5}
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: 80px;
+  }
+
+  /* Ambient background */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(0,229,160,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 100%, rgba(74,158,255,0.05) 0%, transparent 60%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    position: sticky; top:0; z-index: 100;
+    background: rgba(8,12,20,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-left { display:flex; align-items:center; gap:10px; }
+  .header-logo {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), #00a870);
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; font-weight:700; color:#000;
+  }
+  .header-title { font-size:15px; font-weight:700; letter-spacing:-0.3px; }
+  .header-sub { font-size:10px; color:var(--muted2); margin-top:1px; }
+  .header-badge {
+    background: rgba(0,229,160,0.12);
+    border: 1px solid rgba(0,229,160,0.25);
+    color: var(--accent);
+    font-size: 10px; font-weight:600;
+    padding: 3px 8px; border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── PAGES ── */
+  .page { display:none; padding: 20px; position:relative; z-index:1; }
+  .page.active { display:block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── BOTTOM NAV ── */
+  .nav {
+    position:fixed; bottom:0; left:0; right:0; z-index:100;
+    background: rgba(8,12,20,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display:grid; grid-template-columns: repeat(5,1fr);
+    padding: 8px 0 12px;
+  }
+  .nav-item {
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding: 6px 4px;
+    font-size: 9px; font-weight:600; letter-spacing:0.5px;
+    color: var(--muted);
+    transition: color 0.2s;
+    cursor:pointer;
+    text-transform: uppercase;
+  }
+  .nav-item .nav-icon { font-size:20px; transition: transform 0.2s; }
+  .nav-item.active { color: var(--accent); }
+  .nav-item.active .nav-icon { transform: scale(1.15); }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size:10px; font-weight:700; letter-spacing:2px;
+    color: var(--muted); text-transform:uppercase;
+    margin-bottom:12px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .section-label::after {
+    content:''; flex:1; height:1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ── DASHBOARD ── */
+  .welcome-bar {
+    background: linear-gradient(135deg, #0d1f2e, #0f2a1e);
+    border: 1px solid rgba(0,229,160,0.15);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position:relative; overflow:hidden;
+  }
+  .welcome-bar::before {
+    content:'🇪🇹';
+    position:absolute; right:16px; top:50%;
+    transform: translateY(-50%);
+    font-size:48px; opacity:0.15;
+  }
+  .welcome-name { font-size:20px; font-weight:700; margin-bottom:4px; }
+  .welcome-id { font-size:11px; color:var(--muted2); font-family:monospace; }
+  .welcome-tier {
+    display:inline-flex; align-items:center; gap:5px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.2);
+    color:var(--accent); font-size:11px; font-weight:600;
+    padding:3px 10px; border-radius:20px; margin-top:10px;
+  }
+
+  .stats-grid {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:10px; margin-bottom:20px;
+  }
+  .stat-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px; padding:16px;
+    transition: transform 0.2s;
+  }
+  .stat-card:active { transform:scale(0.97); }
+  .stat-label { font-size:10px; color:var(--muted2); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+  .stat-value { font-family:'Bebas Neue'; font-size:32px; line-height:1; letter-spacing:1px; }
+  .stat-value.green { color:var(--green); }
+  .stat-value.yellow { color:var(--accent2); }
+  .stat-value.blue { color:var(--accent4); }
+  .stat-value.red { color:var(--red); }
+  .stat-sub { font-size:10px; color:var(--muted); margin-top:4px; }
+
+  .rates-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px; padding:16px;
+    margin-bottom:20px;
+  }
+  .rate-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .rate-row:last-child { border-bottom:none; }
+  .rate-coin { display:flex; align-items:center; gap:10px; }
+  .coin-icon {
+    width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px;
+  }
+  .coin-name { font-weight:600; font-size:14px; }
+  .coin-sym { font-size:10px; color:var(--muted2); }
+  .rate-price { text-align:right; }
+  .rate-etb { font-weight:700; font-size:14px; }
+  .rate-change { font-size:10px; margin-top:2px; }
+  .rate-change.up { color:var(--green); }
+  .rate-change.down { color:var(--red); }
+
+  /* ── TRADE CARDS ── */
+  .trade-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px; padding:16px;
+    margin-bottom:12px;
+    transition: transform 0.15s, border-color 0.15s;
+    cursor:pointer;
+  }
+  .trade-card:active { transform:scale(0.98); }
+  .trade-card.sell { border-left:3px solid var(--red); }
+  .trade-card.buy { border-left:3px solid var(--green); }
+
+  .trade-top {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .trade-type-badge {
+    font-size:10px; font-weight:700; letter-spacing:1px;
+    padding:3px 10px; border-radius:20px;
+  }
+  .trade-type-badge.sell {
+    background:rgba(255,77,109,0.12);
+    border:1px solid rgba(255,77,109,0.3);
+    color:var(--red);
+  }
+  .trade-type-badge.buy {
+    background:rgba(0,229,160,0.12);
+    border:1px solid rgba(0,229,160,0.3);
+    color:var(--green);
+  }
+  .trade-ref { font-size:10px; color:var(--muted); font-family:monospace; }
+
+  .trade-main {
+    display:flex; align-items:baseline; gap:6px; margin-bottom:8px;
+  }
+  .trade-amount { font-family:'Bebas Neue'; font-size:28px; letter-spacing:1px; }
+  .trade-coin { font-size:14px; font-weight:600; color:var(--muted2); }
+  .trade-rate { font-size:12px; color:var(--muted2); }
+  .trade-rate span { color:var(--accent2); font-weight:600; }
+
+  .trade-meta {
+    display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;
+  }
+  .meta-chip {
+    font-size:10px; font-weight:500;
+    background:var(--card2);
+    border:1px solid var(--border);
+    padding:3px 8px; border-radius:6px;
+    color:var(--muted2);
+  }
+
+  .trade-footer {
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .trader-info { display:flex; align-items:center; gap:8px; }
+  .trader-avatar {
+    width:28px; height:28px; border-radius:50%;
+    background:linear-gradient(135deg,var(--accent4),var(--accent));
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700; color:#000;
+  }
+  .trader-name { font-size:12px; font-weight:600; }
+  .trader-rating { font-size:10px; color:var(--accent2); }
+  .trade-btn {
+    background:linear-gradient(135deg,var(--accent),#00c882);
+    color:#000; font-weight:700; font-size:12px;
+    padding:8px 16px; border-radius:10px;
+    border:none; cursor:pointer;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .trade-btn:active { transform:scale(0.95); opacity:0.9; }
+  .trade-btn.red {
+    background:linear-gradient(135deg,var(--red),#c0392b);
+    color:#fff;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display:flex; gap:8px; overflow-x:auto;
+    padding-bottom:12px; margin-bottom:16px;
+    scrollbar-width:none;
+  }
+  .filter-bar::-webkit-scrollbar { display:none; }
+  .filter-chip {
+    flex-shrink:0;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--muted2); font-size:11px; font-weight:600;
+    padding:6px 14px; border-radius:20px;
+    cursor:pointer; transition:all 0.15s;
+    white-space:nowrap;
+  }
+  .filter-chip.active {
+    background:rgba(0,229,160,0.12);
+    border-color:rgba(0,229,160,0.4);
+    color:var(--accent);
+  }
+
+  /* ── POST TRADE FORM ── */
+  .form-section { margin-bottom:20px; }
+  .form-label {
+    font-size:11px; font-weight:700; letter-spacing:1px;
+    color:var(--muted2); text-transform:uppercase;
+    margin-bottom:8px; display:block;
+  }
+  .type-toggle {
+    display:grid; grid-template-columns:1fr 1fr; gap:8px;
+    margin-bottom:20px;
+  }
+  .type-btn {
+    padding:14px; border-radius:12px; border:2px solid var(--border);
+    background:var(--card); color:var(--muted2);
+    font-size:14px; font-weight:700; cursor:pointer;
+    transition:all 0.2s; text-align:center;
+  }
+  .type-btn.active.buy {
+    border-color:var(--green);
+    background:rgba(0,229,160,0.1);
+    color:var(--green);
+  }
+  .type-btn.active.sell {
+    border-color:var(--red);
+    background:rgba(255,77,109,0.1);
+    color:var(--red);
+  }
+
+  .coin-grid {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:8px;
+    margin-bottom:20px;
+  }
+  .coin-btn {
+    padding:12px 8px; border-radius:12px;
+    border:2px solid var(--border);
+    background:var(--card); color:var(--muted2);
+    font-size:12px; font-weight:700; cursor:pointer;
+    transition:all 0.2s; text-align:center;
+  }
+  .coin-btn .cb-icon { font-size:20px; display:block; margin-bottom:4px; }
+  .coin-btn.active {
+    border-color:var(--accent4);
+    background:rgba(74,158,255,0.1);
+    color:var(--accent4);
+  }
+
+  .input-group { margin-bottom:16px; }
+  .input-field {
+    width:100%; background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:12px; padding:14px 16px;
+    color:var(--text); font-size:16px;
+    font-family:'Space Grotesk',sans-serif;
+    outline:none; transition: border-color 0.2s;
+    -webkit-appearance:none;
+  }
+  .input-field:focus { border-color:rgba(0,229,160,0.4); }
+  .input-hint { font-size:10px; color:var(--muted); margin-top:6px; }
+  .input-hint span { color:var(--accent2); font-weight:600; }
+
+  .payment-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:8px;
+    margin-bottom:20px;
+  }
+  .pm-btn {
+    padding:12px; border-radius:12px;
+    border:2px solid var(--border);
+    background:var(--card); color:var(--muted2);
+    font-size:12px; font-weight:600; cursor:pointer;
+    transition:all 0.2s; text-align:center;
+  }
+  .pm-btn.active {
+    border-color:var(--accent2);
+    background:rgba(245,166,35,0.1);
+    color:var(--accent2);
+  }
+
+  .submit-btn {
+    width:100%; padding:16px;
+    background:linear-gradient(135deg,var(--accent),#00c882);
+    color:#000; font-size:16px; font-weight:800;
+    border:none; border-radius:14px; cursor:pointer;
+    letter-spacing:0.5px;
+    transition: transform 0.15s, opacity 0.15s;
+    font-family:'Space Grotesk',sans-serif;
+  }
+  .submit-btn:active { transform:scale(0.98); opacity:0.9; }
+
+  /* ── PROFILE ── */
+  .profile-header {
+    background:linear-gradient(135deg,#0d1f35,#0a1f15);
+    border:1px solid rgba(74,158,255,0.15);
+    border-radius:16px; padding:24px 20px;
+    text-align:center; margin-bottom:20px;
+    position:relative; overflow:hidden;
+  }
+  .profile-avatar {
+    width:72px; height:72px; border-radius:50%;
+    background:linear-gradient(135deg,var(--accent4),var(--accent));
+    display:flex; align-items:center; justify-content:center;
+    font-size:30px; font-weight:700; color:#000;
+    margin:0 auto 12px;
+    border:3px solid rgba(255,255,255,0.1);
+  }
+  .profile-name { font-size:22px; font-weight:700; margin-bottom:4px; }
+  .profile-id { font-size:11px; color:var(--muted2); font-family:monospace; margin-bottom:12px; }
+  .profile-tier {
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(245,166,35,0.12);
+    border:1px solid rgba(245,166,35,0.3);
+    color:var(--accent2); font-size:12px; font-weight:700;
+    padding:5px 14px; border-radius:20px;
+  }
+  .stars { color:var(--accent2); font-size:14px; margin-top:10px; letter-spacing:2px; }
+
+  .profile-stats {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    margin-bottom:20px;
+  }
+  .ps-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:14px 10px; text-align:center;
+  }
+  .ps-val { font-family:'Bebas Neue'; font-size:28px; color:var(--accent); }
+  .ps-label { font-size:9px; color:var(--muted2); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+
+  .history-item {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:14px 16px;
+    margin-bottom:8px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .hi-left { display:flex; align-items:center; gap:12px; }
+  .hi-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .hi-ref { font-size:11px; font-weight:600; }
+  .hi-date { font-size:10px; color:var(--muted); margin-top:2px; }
+  .hi-amount { font-weight:700; font-size:14px; text-align:right; }
+  .hi-etb { font-size:10px; color:var(--muted2); margin-top:2px; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; z-index:200;
+    background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
+    align-items:flex-end;
+  }
+  .modal-overlay.open { display:flex; animation:modalIn 0.3s ease; }
+  @keyframes modalIn { from{opacity:0} to{opacity:1} }
+  .modal {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:24px 24px 0 0;
+    padding:24px 20px 40px;
+    width:100%;
+    animation:slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  .modal-handle {
+    width:40px; height:4px; border-radius:2px;
+    background:var(--border); margin:0 auto 20px;
+  }
+  .modal-title { font-size:18px; font-weight:700; margin-bottom:16px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--card2); border:1px solid var(--border);
+    border-radius:12px; padding:12px 20px;
+    font-size:13px; font-weight:600;
+    z-index:300; opacity:0; transition:all 0.3s;
+    white-space:nowrap;
+  }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast.success { border-color:rgba(0,229,160,0.4); color:var(--green); }
+  .toast.error { border-color:rgba(255,77,109,0.4); color:var(--red); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="header-left">
     <div class="header-logo">P</div>
-    <div><div class="header-title">P2P Ethiopian</div><div class="header-sub">Crypto Trading</div></div>
+    <div>
+      <div class="header-title">P2P Ethiopian</div>
+      <div class="header-sub">Crypto Trading</div>
+    </div>
   </div>
   <div class="header-badge" id="headerBadge">🟢 LIVE</div>
 </div>
 
-<!-- HOME -->
+<!-- ══════════════════════════════════════ -->
+<!-- PAGE: DASHBOARD -->
+<!-- ══════════════════════════════════════ -->
 <div class="page active" id="page-home">
+
   <div class="welcome-bar">
-    <div class="welcome-name" id="userName">Loading...</div>
-    <div class="welcome-id" id="userId">Trader ID: ...</div>
-    <div class="welcome-tier" id="userTier">...</div>
+    <div class="welcome-name">Welcome, Abebe 👋</div>
+    <div class="welcome-id">Trader ID: #ET00123</div>
+    <div class="welcome-tier">🥈 Trusted Trader</div>
   </div>
+
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value green" id="statCompleted">-</div><div class="stat-sub">Total trades</div></div>
-    <div class="stat-card"><div class="stat-label">Rating</div><div class="stat-value yellow" id="statRating">-</div><div class="stat-sub">⭐ out of 5.0</div></div>
-    <div class="stat-card"><div class="stat-label">Volume</div><div class="stat-value blue" id="statVolume">-</div><div class="stat-sub">ETB traded</div></div>
-    <div class="stat-card"><div class="stat-label">Disputes</div><div class="stat-value red" id="statDisputes">0</div><div class="stat-sub">Clean record</div></div>
+    <div class="stat-card">
+      <div class="stat-label">Completed</div>
+      <div class="stat-value green">42</div>
+      <div class="stat-sub">Total trades</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Rating</div>
+      <div class="stat-value yellow">4.8</div>
+      <div class="stat-sub">⭐ out of 5.0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Volume</div>
+      <div class="stat-value blue">2.4M</div>
+      <div class="stat-sub">ETB traded</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Disputes</div>
+      <div class="stat-value red">0</div>
+      <div class="stat-sub">Clean record</div>
+    </div>
   </div>
+
   <div class="section-label">Live Rates</div>
-  <div class="rates-card">
-    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(38,161,123,0.15)">💵</div><div><div class="coin-name">Tether</div><div class="coin-sym">USDT</div></div></div><div class="rate-price"><div class="rate-etb" id="rate-usdt">...</div><div class="rate-change up" id="change-usdt">fetching</div></div></div>
-    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(247,147,26,0.15)">₿</div><div><div class="coin-name">Bitcoin</div><div class="coin-sym">BTC</div></div></div><div class="rate-price"><div class="rate-etb" id="rate-btc">...</div><div class="rate-change up" id="change-btc">fetching</div></div></div>
-    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(98,126,234,0.15)">⟠</div><div><div class="coin-name">Ethereum</div><div class="coin-sym">ETH</div></div></div><div class="rate-price"><div class="rate-etb" id="rate-eth">...</div><div class="rate-change up" id="change-eth">fetching</div></div></div>
-    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(243,186,47,0.15)">🔶</div><div><div class="coin-name">BNB</div><div class="coin-sym">BNB</div></div></div><div class="rate-price"><div class="rate-etb" id="rate-bnb">...</div><div class="rate-change up" id="change-bnb">fetching</div></div></div>
+  <div class="rates-card" id="ratesCard">
+    <div class="rate-row">
+      <div class="rate-coin">
+        <div class="coin-icon" style="background:rgba(38,161,123,0.15)">💵</div>
+        <div><div class="coin-name">Tether</div><div class="coin-sym">USDT</div></div>
+      </div>
+      <div class="rate-price">
+        <div class="rate-etb" id="rate-usdt">Loading...</div>
+        <div class="rate-change up" id="change-usdt">fetching...</div>
+      </div>
+    </div>
+    <div class="rate-row">
+      <div class="rate-coin">
+        <div class="coin-icon" style="background:rgba(247,147,26,0.15)">₿</div>
+        <div><div class="coin-name">Bitcoin</div><div class="coin-sym">BTC</div></div>
+      </div>
+      <div class="rate-price">
+        <div class="rate-etb" id="rate-btc">Loading...</div>
+        <div class="rate-change up" id="change-btc">fetching...</div>
+      </div>
+    </div>
+    <div class="rate-row">
+      <div class="rate-coin">
+        <div class="coin-icon" style="background:rgba(98,126,234,0.15)">⟠</div>
+        <div><div class="coin-name">Ethereum</div><div class="coin-sym">ETH</div></div>
+      </div>
+      <div class="rate-price">
+        <div class="rate-etb" id="rate-eth">Loading...</div>
+        <div class="rate-change up" id="change-eth">fetching...</div>
+      </div>
+    </div>
+    <div class="rate-row">
+      <div class="rate-coin">
+        <div class="coin-icon" style="background:rgba(243,186,47,0.15)">🔶</div>
+        <div><div class="coin-name">BNB</div><div class="coin-sym">BNB</div></div>
+      </div>
+      <div class="rate-price">
+        <div class="rate-etb" id="rate-bnb">Loading...</div>
+        <div class="rate-change up" id="change-bnb">fetching...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Recent Activity</div>
+  <div class="history-item">
+    <div class="hi-left">
+      <div class="hi-dot" style="background:var(--green)"></div>
+      <div><div class="hi-ref">SELL 50 USDT</div><div class="hi-date">Today, 09:42</div></div>
+    </div>
+    <div><div class="hi-amount" style="color:var(--green)">+675,000</div><div class="hi-etb">ETB received</div></div>
+  </div>
+  <div class="history-item">
+    <div class="hi-left">
+      <div class="hi-dot" style="background:var(--accent4)"></div>
+      <div><div class="hi-ref">BUY 0.01 BTC</div><div class="hi-date">Yesterday</div></div>
+    </div>
+    <div><div class="hi-amount" style="color:var(--accent4)">-1,450,000</div><div class="hi-etb">ETB paid</div></div>
   </div>
 </div>
 
-<!-- BROWSE -->
+<!-- ══════════════════════════════════════ -->
+<!-- PAGE: BROWSE -->
+<!-- ══════════════════════════════════════ -->
 <div class="page" id="page-browse">
+
   <div class="filter-bar">
     <div class="filter-chip active" onclick="setFilter(this,'all')">All</div>
     <div class="filter-chip" onclick="setFilter(this,'sell')">📉 SELL</div>
@@ -165,24 +583,110 @@
     <div class="filter-chip" onclick="setFilter(this,'btc')">BTC</div>
     <div class="filter-chip" onclick="setFilter(this,'eth')">ETH</div>
     <div class="filter-chip" onclick="setFilter(this,'bnb')">BNB</div>
+    <div class="filter-chip" onclick="setFilter(this,'telebirr')">Telebirr</div>
+    <div class="filter-chip" onclick="setFilter(this,'cbe')">CBE</div>
   </div>
-  <div id="tradesList"><div class="loading"><span class="loading-spinner">⏳</span>Loading trades...</div></div>
+
+  <!-- Trade Cards -->
+  <div class="trade-card sell" onclick="openTradeModal('sell','TRD001','Abebe K.','A',100,'USDT',13500,'Telebirr | CBE',500,50000,4.8,42)">
+    <div class="trade-top">
+      <span class="trade-type-badge sell">📉 SELL</span>
+      <span class="trade-ref">#TRD001</span>
+    </div>
+    <div class="trade-main">
+      <span class="trade-amount">100</span>
+      <span class="trade-coin">USDT</span>
+    </div>
+    <div class="trade-rate">Rate: <span>13,500 ETB</span>/USDT</div>
+    <div class="trade-meta" style="margin-top:8px">
+      <span class="meta-chip">💳 Telebirr</span>
+      <span class="meta-chip">🏦 CBE Birr</span>
+      <span class="meta-chip">📊 500–50,000 ETB</span>
+    </div>
+    <div class="trade-footer">
+      <div class="trader-info">
+        <div class="trader-avatar">A</div>
+        <div><div class="trader-name">Abebe K.</div><div class="trader-rating">⭐ 4.8 · 42 trades · ✅</div></div>
+      </div>
+      <button class="trade-btn">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="trade-card buy" onclick="openTradeModal('buy','TRD002','Tigist M.','T',0.005,'BTC',14800000,'Awash Bank',100000,500000,4.6,28)">
+    <div class="trade-top">
+      <span class="trade-type-badge buy">📈 BUY</span>
+      <span class="trade-ref">#TRD002</span>
+    </div>
+    <div class="trade-main">
+      <span class="trade-amount">0.005</span>
+      <span class="trade-coin">BTC</span>
+    </div>
+    <div class="trade-rate">Rate: <span>14,800,000 ETB</span>/BTC</div>
+    <div class="trade-meta" style="margin-top:8px">
+      <span class="meta-chip">🏦 Awash Bank</span>
+      <span class="meta-chip">📊 100K–500K ETB</span>
+    </div>
+    <div class="trade-footer">
+      <div class="trader-info">
+        <div class="trader-avatar" style="background:linear-gradient(135deg,#f5a623,#e67e22)">T</div>
+        <div><div class="trader-name">Tigist M.</div><div class="trader-rating">⭐ 4.6 · 28 trades · ✅</div></div>
+      </div>
+      <button class="trade-btn red">Sell Now</button>
+    </div>
+  </div>
+
+  <div class="trade-card sell" onclick="openTradeModal('sell','TRD003','Dawit H.','D',200,'USDT',13450,'Telebirr',1000,100000,5.0,67)">
+    <div class="trade-top">
+      <span class="trade-type-badge sell">📉 SELL</span>
+      <span class="trade-ref">#TRD003</span>
+    </div>
+    <div class="trade-main">
+      <span class="trade-amount">200</span>
+      <span class="trade-coin">USDT</span>
+    </div>
+    <div class="trade-rate">Rate: <span>13,450 ETB</span>/USDT</div>
+    <div class="trade-meta" style="margin-top:8px">
+      <span class="meta-chip">💳 Telebirr</span>
+      <span class="meta-chip">📊 1,000–100,000 ETB</span>
+    </div>
+    <div class="trade-footer">
+      <div class="trader-info">
+        <div class="trader-avatar" style="background:linear-gradient(135deg,#9b59b6,#6c3483)">D</div>
+        <div><div class="trader-name">Dawit H.</div><div class="trader-rating">⭐ 5.0 · 67 trades · 🥇</div></div>
+      </div>
+      <button class="trade-btn">Buy Now</button>
+    </div>
+  </div>
+
 </div>
 
-<!-- POST -->
+<!-- ══════════════════════════════════════ -->
+<!-- PAGE: POST TRADE -->
+<!-- ══════════════════════════════════════ -->
 <div class="page" id="page-post">
+
   <div class="section-label">Trade Type</div>
   <div class="type-toggle">
     <button class="type-btn buy active" id="btnBuy" onclick="selectType('buy')">📈 BUY</button>
     <button class="type-btn sell" id="btnSell" onclick="selectType('sell')">📉 SELL</button>
   </div>
+
   <div class="section-label">Select Coin</div>
   <div class="coin-grid">
-    <button class="coin-btn active" id="coin-USDT" onclick="selectCoin('USDT')"><span class="cb-icon">💵</span>USDT</button>
-    <button class="coin-btn" id="coin-BTC" onclick="selectCoin('BTC')"><span class="cb-icon">₿</span>BTC</button>
-    <button class="coin-btn" id="coin-ETH" onclick="selectCoin('ETH')"><span class="cb-icon">⟠</span>ETH</button>
-    <button class="coin-btn" id="coin-BNB" onclick="selectCoin('BNB')"><span class="cb-icon">🔶</span>BNB</button>
+    <button class="coin-btn active" id="coin-USDT" onclick="selectCoin('USDT')">
+      <span class="cb-icon">💵</span>USDT
+    </button>
+    <button class="coin-btn" id="coin-BTC" onclick="selectCoin('BTC')">
+      <span class="cb-icon">₿</span>BTC
+    </button>
+    <button class="coin-btn" id="coin-ETH" onclick="selectCoin('ETH')">
+      <span class="cb-icon">⟠</span>ETH
+    </button>
+    <button class="coin-btn" id="coin-BNB" onclick="selectCoin('BNB')">
+      <span class="cb-icon">🔶</span>BNB
+    </button>
   </div>
+
   <div class="section-label">Amount & Rate</div>
   <div class="input-group">
     <label class="form-label">Amount</label>
@@ -194,11 +698,19 @@
     <input type="number" class="input-field" id="tradeRate" placeholder="e.g. 13500" inputmode="decimal"/>
     <div class="input-hint">Market rate: <span id="marketRateHint">loading...</span></div>
   </div>
+
   <div class="section-label">Trade Limits (ETB)</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
-    <div><label class="form-label">Min ETB</label><input type="number" class="input-field" id="tradeMin" placeholder="500" inputmode="decimal"/></div>
-    <div><label class="form-label">Max ETB</label><input type="number" class="input-field" id="tradeMax" placeholder="50000" inputmode="decimal"/></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+    <div class="input-group" style="margin:0">
+      <label class="form-label">Min ETB</label>
+      <input type="number" class="input-field" id="tradeMin" placeholder="500" inputmode="decimal"/>
+    </div>
+    <div class="input-group" style="margin:0">
+      <label class="form-label">Max ETB</label>
+      <input type="number" class="input-field" id="tradeMax" placeholder="50000" inputmode="decimal"/>
+    </div>
   </div>
+
   <div class="section-label">Payment Methods</div>
   <div class="payment-grid">
     <button class="pm-btn" id="pm-Telebirr" onclick="togglePM('Telebirr')">💳 Telebirr</button>
@@ -208,72 +720,160 @@
     <button class="pm-btn" id="pm-Dashen" onclick="togglePM('Dashen')">🏦 Dashen</button>
     <button class="pm-btn" id="pm-Cash" onclick="togglePM('Cash')">💵 Cash</button>
   </div>
+
   <button class="submit-btn" onclick="submitTrade()">🚀 Post Trade</button>
 </div>
 
-<!-- ORDERS -->
+<!-- ══════════════════════════════════════ -->
+<!-- PAGE: ORDERS -->
+<!-- ══════════════════════════════════════ -->
 <div class="page" id="page-orders">
-  <div id="ordersList"><div class="loading"><span class="loading-spinner">⏳</span>Loading orders...</div></div>
+  <div class="section-label">Active Orders</div>
+
+  <div class="trade-card sell">
+    <div class="trade-top">
+      <span class="trade-type-badge sell">🔒 ESCROW</span>
+      <span class="trade-ref">#ORD441</span>
+    </div>
+    <div class="trade-main">
+      <span class="trade-amount">50</span>
+      <span class="trade-coin">USDT</span>
+    </div>
+    <div class="trade-rate">Total: <span>675,000 ETB</span></div>
+    <div class="trade-meta" style="margin-top:8px">
+      <span class="meta-chip">⏳ Awaiting payment</span>
+      <span class="meta-chip">💳 Telebirr</span>
+    </div>
+    <div class="trade-footer">
+      <div class="trader-info">
+        <div class="trader-avatar">B</div>
+        <div><div class="trader-name">Buyer: Belay T.</div><div class="trader-rating">⭐ 4.2 · 12 trades</div></div>
+      </div>
+      <button class="trade-btn" onclick="showToast('✅ Payment confirmed!','success')">Confirm</button>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:20px">Completed Orders</div>
+
+  <div class="history-item">
+    <div class="hi-left">
+      <div class="hi-dot" style="background:var(--green)"></div>
+      <div><div class="hi-ref">#ORD440 · SELL 100 USDT</div><div class="hi-date">Jun 1, 2026 · 09:12</div></div>
+    </div>
+    <div><div class="hi-amount" style="color:var(--green)">+1,350,000</div><div class="hi-etb">ETB ✅</div></div>
+  </div>
+  <div class="history-item">
+    <div class="hi-left">
+      <div class="hi-dot" style="background:var(--accent4)"></div>
+      <div><div class="hi-ref">#ORD438 · BUY 50 USDT</div><div class="hi-date">May 30, 2026</div></div>
+    </div>
+    <div><div class="hi-amount" style="color:var(--accent4)">-672,500</div><div class="hi-etb">ETB ✅</div></div>
+  </div>
+  <div class="history-item">
+    <div class="hi-left">
+      <div class="hi-dot" style="background:var(--accent2)"></div>
+      <div><div class="hi-ref">#ORD435 · SELL 0.002 BTC</div><div class="hi-date">May 28, 2026</div></div>
+    </div>
+    <div><div class="hi-amount" style="color:var(--accent2)">+29,600</div><div class="hi-etb">ETB ✅</div></div>
+  </div>
 </div>
 
-<!-- PROFILE -->
+<!-- ══════════════════════════════════════ -->
+<!-- PAGE: PROFILE -->
+<!-- ══════════════════════════════════════ -->
 <div class="page" id="page-profile">
   <div class="profile-header">
-    <div class="profile-avatar" id="profileAvatar">?</div>
-    <div class="profile-name" id="profileName">Loading...</div>
-    <div class="profile-id" id="profileId">...</div>
-    <div class="profile-tier" id="profileTier">...</div>
-    <div class="stars" id="profileStars">⭐⭐⭐⭐⭐</div>
-    <div style="font-size:12px;color:var(--muted2);margin-top:6px" id="profileRating">...</div>
+    <div class="profile-avatar">A</div>
+    <div class="profile-name">Abebe Kebede</div>
+    <div class="profile-id">#ET00123 · @abebe_k</div>
+    <div class="profile-tier">🥈 Trusted Trader</div>
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+    <div style="font-size:12px;color:var(--muted2);margin-top:6px;">4.8 / 5.0 rating</div>
   </div>
+
   <div class="profile-stats">
-    <div class="ps-card"><div class="ps-val" id="psCompleted">-</div><div class="ps-label">Completed</div></div>
-    <div class="ps-card"><div class="ps-val" style="color:var(--accent2)" id="psCancelled">-</div><div class="ps-label">Cancelled</div></div>
-    <div class="ps-card"><div class="ps-val" style="color:var(--red)" id="psDisputes">0</div><div class="ps-label">Disputes</div></div>
+    <div class="ps-card">
+      <div class="ps-val">42</div>
+      <div class="ps-label">Completed</div>
+    </div>
+    <div class="ps-card">
+      <div class="ps-val" style="color:var(--accent2)">2</div>
+      <div class="ps-label">Cancelled</div>
+    </div>
+    <div class="ps-card">
+      <div class="ps-val" style="color:var(--red)">0</div>
+      <div class="ps-label">Disputes</div>
+    </div>
   </div>
+
   <div class="section-label">Account Details</div>
   <div class="rates-card">
-    <div class="rate-row"><span style="color:var(--muted2);font-size:13px">📅 Member Since</span><span style="font-weight:600;font-size:13px" id="memberSince">...</span></div>
-    <div class="rate-row"><span style="color:var(--muted2);font-size:13px">💰 Total Volume</span><span style="font-weight:600;font-size:13px" id="totalVolume">...</span></div>
-    <div class="rate-row"><span style="color:var(--muted2);font-size:13px">🏆 Status</span><span style="font-weight:600;font-size:13px" id="profileStatus">...</span></div>
+    <div class="rate-row">
+      <span style="color:var(--muted2);font-size:13px;">📱 Phone</span>
+      <span style="font-weight:600;font-size:13px;">09XX XXX XXX</span>
+    </div>
+    <div class="rate-row">
+      <span style="color:var(--muted2);font-size:13px;">🌐 Language</span>
+      <span style="font-weight:600;font-size:13px;">English 🇬🇧</span>
+    </div>
+    <div class="rate-row">
+      <span style="color:var(--muted2);font-size:13px;">📅 Member Since</span>
+      <span style="font-weight:600;font-size:13px;">June 2025</span>
+    </div>
+    <div class="rate-row">
+      <span style="color:var(--muted2);font-size:13px;">💰 Total Volume</span>
+      <span style="font-weight:600;font-size:13px;">2,400,000 ETB</span>
+    </div>
   </div>
-  <button class="submit-btn" style="background:linear-gradient(135deg,var(--accent4),#2980b9);margin-top:8px" onclick="showToast('🏅 VIP application sent!','success')">🏅 Apply for VIP Tier</button>
+
+  <button class="submit-btn" style="background:linear-gradient(135deg,var(--accent4),#2980b9);margin-top:8px;"
+    onclick="showToast('🏅 VIP application sent!','success')">
+    🏅 Apply for VIP Tier
+  </button>
 </div>
 
-<!-- NAV -->
+<!-- ══════════════════════════════════════ -->
+<!-- BOTTOM NAV -->
+<!-- ══════════════════════════════════════ -->
 <nav class="nav">
-  <div class="nav-item active" id="nav-home" onclick="switchPage('home')"><span class="nav-icon">🏠</span>Home</div>
-  <div class="nav-item" id="nav-browse" onclick="switchPage('browse')"><span class="nav-icon">🔍</span>Browse</div>
-  <div class="nav-item" id="nav-post" onclick="switchPage('post')"><span class="nav-icon">➕</span>Post</div>
-  <div class="nav-item" id="nav-orders" onclick="switchPage('orders')"><span class="nav-icon">📋</span>Orders</div>
-  <div class="nav-item" id="nav-profile" onclick="switchPage('profile')"><span class="nav-icon">👤</span>Profile</div>
-  <div class="nav-item" id="nav-wallet" onclick="switchPage('wallet')"><span class="nav-icon">💰</span>Wallet</div>
+  <div class="nav-item active" id="nav-home" onclick="switchPage('home')">
+    <span class="nav-icon">🏠</span>Home
+  </div>
+  <div class="nav-item" id="nav-browse" onclick="switchPage('browse')">
+    <span class="nav-icon">🔍</span>Browse
+  </div>
+  <div class="nav-item" id="nav-post" onclick="switchPage('post')">
+    <span class="nav-icon">➕</span>Post
+  </div>
+  <div class="nav-item" id="nav-orders" onclick="switchPage('orders')">
+    <span class="nav-icon">📋</span>Orders
+  </div>
+  <div class="nav-item" id="nav-profile" onclick="switchPage('profile')">
+    <span class="nav-icon">👤</span>Profile
+  </div>
 </nav>
 
-<!-- MODAL -->
+<!-- TRADE MODAL -->
 <div class="modal-overlay" id="tradeModal" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalTitle">Confirm Trade</div>
     <div id="modalContent"></div>
-    <button class="submit-btn" id="modalBtn" style="margin-top:16px">Confirm</button>
-    <button onclick="document.getElementById('tradeModal').classList.remove('open')" style="width:100%;margin-top:10px;padding:14px;background:transparent;border:1px solid var(--border);border-radius:12px;color:var(--muted2);font-size:14px;font-family:'Space Grotesk',sans-serif;cursor:pointer">Cancel</button>
+    <button class="submit-btn" id="modalBtn" style="margin-top:16px">Confirm Trade</button>
+    <button onclick="document.getElementById('tradeModal').classList.remove('open')"
+      style="width:100%;margin-top:10px;padding:14px;background:transparent;border:1px solid var(--border);
+             border-radius:12px;color:var(--muted2);font-size:14px;font-family:'Space Grotesk',sans-serif;cursor:pointer;">
+      Cancel
+    </button>
   </div>
 </div>
 
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Config ──────────────────────────────────────────────────────────────────
-// Replace with your actual Railway API URL after deploying
-const API_BASE = (window.API_BASE || "https://YOUR-RAILWAY-APP.railway.app");
-const USD_ETB  = 135;
-
-// ── Telegram Web App ─────────────────────────────────────────────────────────
+// ── Telegram Web App Init ──
 const tg = window.Telegram?.WebApp;
-let currentUser = null;
-let liveRates   = {};
-
 if (tg) {
   tg.ready();
   tg.expand();
@@ -281,405 +881,186 @@ if (tg) {
   tg.setBackgroundColor('#080c14');
 }
 
-const TG_ID = tg?.initDataUnsafe?.user?.id || null;
-const TG_USER = tg?.initDataUnsafe?.user || {};
-
-// ── Init ─────────────────────────────────────────────────────────────────────
-async function init() {
-  fetchRates();
-  if (TG_ID) {
-    await loadUser();
-  } else {
-    // Fallback for testing outside Telegram
-    setUserUI({ full_name:"Guest", telegram_id:"0", tier:"new",
-                tier_label:"🆕 New", completed_trades:0, cancelled_trades:0,
-                rating:0, volume_etb:0, created_at: new Date().toISOString() });
-  }
-}
-
-// ── Load user from API ────────────────────────────────────────────────────────
-async function loadUser() {
-  try {
-    const res = await fetch(`${API_BASE}/api/user?tg_id=${TG_ID}`);
-    if (!res.ok) throw new Error("not found");
-    const user = await res.json();
-    currentUser = user;
-    setUserUI(user);
-  } catch(e) {
-    // User not registered yet
-    setUserUI({ full_name: TG_USER.first_name || "Guest",
-                telegram_id: TG_ID, tier:"new", tier_label:"🆕 New",
-                completed_trades:0, cancelled_trades:0, rating:0,
-                volume_etb:0, created_at: new Date().toISOString() });
-    showToast("⚠️ Please register via /start in the bot", "error");
-  }
-}
-
-function setUserUI(user) {
-  const name = user.full_name || "Trader";
-  const initial = name.charAt(0).toUpperCase();
-  const tid = String(user.telegram_id || "0").slice(-5);
-  const vol = formatVolume(user.volume_etb || 0);
-  const rating = (user.rating || 0).toFixed(1);
-  const stars = "⭐".repeat(Math.round(user.rating || 0)) || "☆☆☆☆☆";
-  const since = user.created_at ? user.created_at.slice(0,7) : "—";
-
-  // Home
-  document.getElementById("userName").textContent    = `Welcome, ${name.split(" ")[0]} 👋`;
-  document.getElementById("userId").textContent      = `Trader ID: #ET${tid}`;
-  document.getElementById("userTier").textContent    = user.tier_label || "🆕 New";
-  document.getElementById("statCompleted").textContent = user.completed_trades || 0;
-  document.getElementById("statRating").textContent  = rating;
-  document.getElementById("statVolume").textContent  = vol;
-
-  // Profile
-  document.getElementById("profileAvatar").textContent = initial;
-  document.getElementById("profileName").textContent  = name;
-  document.getElementById("profileId").textContent    = `#ET${tid} · @${TG_USER.username || "user"}`;
-  document.getElementById("profileTier").textContent  = user.tier_label || "🆕 New";
-  document.getElementById("profileStars").textContent = stars;
-  document.getElementById("profileRating").textContent= `${rating} / 5.0 rating`;
-  document.getElementById("psCompleted").textContent  = user.completed_trades || 0;
-  document.getElementById("psCancelled").textContent  = user.cancelled_trades || 0;
-  document.getElementById("memberSince").textContent  = since;
-  document.getElementById("totalVolume").textContent  = `${(user.volume_etb||0).toLocaleString()} ETB`;
-  document.getElementById("profileStatus").textContent= user.tier_label || "🆕 New";
-}
-
-function formatVolume(etb) {
-  if (etb >= 1_000_000) return (etb/1_000_000).toFixed(1)+"M";
-  if (etb >= 1_000) return (etb/1_000).toFixed(0)+"K";
-  return etb.toFixed(0);
-}
-
-// ── Load Trades ───────────────────────────────────────────────────────────────
-let activeFilter = { type: null, coin: null };
-
-async function loadTrades() {
-  const list = document.getElementById("tradesList");
-  list.innerHTML = '<div class="loading"><span class="loading-spinner">⏳</span>Loading trades...</div>';
-  try {
-    let url = `${API_BASE}/api/trades?limit=20`;
-    if (activeFilter.type) url += `&type=${activeFilter.type}`;
-    if (activeFilter.coin) url += `&coin=${activeFilter.coin.toUpperCase()}`;
-    const res = await fetch(url);
-    const trades = await res.json();
-    if (!trades.length) {
-      list.innerHTML = '<div class="empty-state"><span class="empty-icon">📭</span>No trades found.<br>Be the first to post one!</div>';
-      return;
-    }
-    list.innerHTML = trades.map(t => tradeCardHTML(t)).join("");
-  } catch(e) {
-    list.innerHTML = '<div class="empty-state"><span class="empty-icon">⚠️</span>Could not load trades.<br>Check connection.</div>';
-  }
-}
-
-function tradeCardHTML(t) {
-  const isSell = t.trade_type === "sell";
-  const payments = (t.payment_list || t.payment_methods.split(",")).slice(0,2).map(p=>`<span class="meta-chip">💳 ${p.trim()}</span>`).join("");
-  const initial = (t.full_name||"?").charAt(0).toUpperCase();
-  return `
-  <div class="trade-card ${t.trade_type}" onclick="openTradeModal(${JSON.stringify(t).replace(/"/g,'&quot;')})">
-    <div class="trade-top">
-      <span class="trade-type-badge ${t.trade_type}">${isSell?'📉 SELL':'📈 BUY'}</span>
-      <span class="trade-ref">#${t.trade_ref}</span>
-    </div>
-    <div class="trade-main"><span class="trade-amount">${t.amount}</span><span class="trade-coin">${t.coin}</span></div>
-    <div class="trade-rate">Rate: <span>${Number(t.rate_etb).toLocaleString()} ETB</span>/${t.coin}</div>
-    <div class="trade-meta" style="margin-top:8px">${payments}<span class="meta-chip">📊 ${Number(t.min_etb).toLocaleString()}–${Number(t.max_etb).toLocaleString()} ETB</span></div>
-    <div class="trade-footer">
-      <div class="trader-info">
-        <div class="trader-avatar">${initial}</div>
-        <div><div class="trader-name">${t.full_name||"Trader"}</div><div class="trader-rating">⭐ ${Number(t.rating||0).toFixed(1)} · ${t.completed_trades||0} trades ${t.tier_icon||""}</div></div>
-      </div>
-      <button class="trade-btn ${isSell?'':'red'}">${isSell?'Buy Now':'Sell Now'}</button>
-    </div>
-  </div>`;
-}
-
-// ── Load Orders ───────────────────────────────────────────────────────────────
-async function loadOrders() {
-  const list = document.getElementById("ordersList");
-  list.innerHTML = '<div class="loading"><span class="loading-spinner">⏳</span>Loading orders...</div>';
-  if (!TG_ID) {
-    list.innerHTML = '<div class="empty-state"><span class="empty-icon">🔒</span>Login via Telegram to see your orders.</div>';
-    return;
-  }
-  try {
-    const res = await fetch(`${API_BASE}/api/orders?tg_id=${TG_ID}`);
-    const orders = await res.json();
-    if (!orders.length) {
-      list.innerHTML = '<div class="empty-state"><span class="empty-icon">📋</span>No orders yet.<br>Browse trades to get started!</div>';
-      return;
-    }
-    list.innerHTML = orders.map(o => orderItemHTML(o)).join("");
-  } catch(e) {
-    list.innerHTML = '<div class="empty-state"><span class="empty-icon">⚠️</span>Could not load orders.</div>';
-  }
-}
-
-function orderItemHTML(o) {
-  const colors = { completed:"var(--green)", cancelled:"var(--red)", escrow_locked:"var(--accent4)", payment_sent:"var(--accent2)", pending:"var(--muted)" };
-  const dot = colors[o.status] || "var(--muted)";
-  const action = o.is_buyer ? `BUY ${o.amount} ${o.coin}` : `SELL ${o.amount} ${o.coin}`;
-  const etb = Number(o.total_etb).toLocaleString();
-  const date = o.created_at ? o.created_at.slice(0,10) : "";
-  const sign = o.is_buyer ? "-" : "+";
-  const color = o.is_buyer ? "var(--accent4)" : "var(--green)";
-  return `
-  <div class="history-item">
-    <div class="hi-left">
-      <div class="hi-dot" style="background:${dot}"></div>
-      <div><div class="hi-ref">#${o.order_ref} · ${action}</div><div class="hi-date">${date} · ${o.status}</div></div>
-    </div>
-    <div><div class="hi-amount" style="color:${color}">${sign}${etb}</div><div class="hi-etb">ETB</div></div>
-  </div>`;
-}
-
-// ── Filter ────────────────────────────────────────────────────────────────────
-function setFilter(el, type) {
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  if (type === 'all') { activeFilter = {}; }
-  else if (['sell','buy'].includes(type)) { activeFilter.type = type; delete activeFilter.coin; }
-  else { activeFilter.coin = type; delete activeFilter.type; }
-  loadTrades();
-}
-
-// ── Navigation ────────────────────────────────────────────────────────────────
+// ── Navigation ──
 function switchPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   document.getElementById('nav-' + name).classList.add('active');
-  if (name === 'browse') loadTrades();
-  if (name === 'orders') loadOrders();
 }
 
-// ── Post trade ────────────────────────────────────────────────────────────────
-let selectedType = 'buy', selectedCoin = 'USDT';
-const selectedPMs = new Set();
-
-function selectType(t) {
-  selectedType = t;
-  document.getElementById('btnBuy').className = 'type-btn buy' + (t==='buy'?' active':'');
-  document.getElementById('btnSell').className = 'type-btn sell' + (t==='sell'?' active':'');
+// ── Filter chips ──
+function setFilter(el, type) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
 }
-function selectCoin(c) {
-  selectedCoin = c;
+
+// ── Trade type selection ──
+let selectedType = 'buy';
+function selectType(type) {
+  selectedType = type;
+  const btnBuy = document.getElementById('btnBuy');
+  const btnSell = document.getElementById('btnSell');
+  btnBuy.className = 'type-btn buy' + (type === 'buy' ? ' active' : '');
+  btnSell.className = 'type-btn sell' + (type === 'sell' ? ' active' : '');
+}
+
+// ── Coin selection ──
+let selectedCoin = 'USDT';
+function selectCoin(coin) {
+  selectedCoin = coin;
   document.querySelectorAll('.coin-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('coin-'+c).classList.add('active');
-  document.getElementById('coinHint').textContent = c;
-  const r = liveRates[c];
-  document.getElementById('marketRateHint').textContent = r ? r.toLocaleString('en',{maximumFractionDigits:0})+' ETB' : 'loading...';
+  document.getElementById('coin-' + coin).classList.add('active');
+  document.getElementById('coinHint').textContent = coin;
+  const rate = liveRates[coin];
+  document.getElementById('marketRateHint').textContent = rate
+    ? rate.toLocaleString() + ' ETB' : 'loading...';
 }
+
+// ── Payment methods ──
+const selectedPMs = new Set();
 function togglePM(pm) {
-  const btn = document.getElementById('pm-'+pm);
-  if (selectedPMs.has(pm)) { selectedPMs.delete(pm); btn.classList.remove('active'); }
-  else { selectedPMs.add(pm); btn.classList.add('active'); }
-}
-function submitTrade() {
-  const amount=document.getElementById('tradeAmount').value;
-  const rate=document.getElementById('tradeRate').value;
-  const min=document.getElementById('tradeMin').value;
-  const max=document.getElementById('tradeMax').value;
-  if (!amount||!rate||!min||!max) { showToast('⚠️ Please fill all fields','error'); return; }
-  if (!selectedPMs.size) { showToast('⚠️ Select a payment method','error'); return; }
-  if (tg) tg.sendData(JSON.stringify({ action:'post_trade', type:selectedType, coin:selectedCoin, amount, rate, min, max, payments:Array.from(selectedPMs) }));
-  showToast('✅ Trade posted!','success');
-  setTimeout(()=>switchPage('browse'),1500);
-}
-
-// ── Trade modal ───────────────────────────────────────────────────────────────
-function openTradeModal(t) {
-  if (typeof t === 'string') t = JSON.parse(t.replace(/&quot;/g,'"'));
-  const isBuy = t.trade_type === 'sell';
-  document.getElementById('modalTitle').textContent = isBuy ? `🛒 Buy ${t.coin}` : `💸 Sell ${t.coin}`;
-  document.getElementById('modalContent').innerHTML = `
-    <div style="background:var(--card2);border-radius:12px;padding:16px;margin-bottom:12px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="color:var(--muted2);font-size:13px">Amount</span><span style="font-weight:700">${t.amount} ${t.coin}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="color:var(--muted2);font-size:13px">Rate</span><span style="font-weight:700;color:var(--accent2)">${Number(t.rate_etb).toLocaleString()} ETB</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="color:var(--muted2);font-size:13px">Total</span><span style="font-weight:700;color:var(--accent)">${Number(t.total_etb).toLocaleString()} ETB</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted2);font-size:13px">Trader</span><span style="font-weight:600;font-size:12px">${t.full_name||"Trader"} ⭐${Number(t.rating||0).toFixed(1)}</span></div>
-    </div>
-    <div style="padding:10px;background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.15);border-radius:10px;font-size:12px;color:var(--muted2)">
-      🔒 Crypto locked in escrow until payment confirmed
-    </div>`;
-  document.getElementById('modalBtn').textContent = isBuy ? '✅ Confirm Purchase' : '✅ Confirm Sale';
-  document.getElementById('modalBtn').onclick = () => {
-    if (tg) tg.sendData(JSON.stringify({ action:'start_trade', trade_ref:t.trade_ref }));
-    document.getElementById('tradeModal').classList.remove('open');
-    showToast('🔒 Escrow activated!','success');
-    setTimeout(()=>switchPage('orders'),1200);
-  };
-  document.getElementById('tradeModal').classList.add('open');
-}
-function closeModal(e) { if (e.target===document.getElementById('tradeModal')) document.getElementById('tradeModal').classList.remove('open'); }
-
-// ── Live rates ────────────────────────────────────────────────────────────────
-async function fetchRates() {
-  try {
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether,bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true');
-    const data = await res.json();
-    const map = {tether:'usdt',bitcoin:'btc',ethereum:'eth',binancecoin:'bnb'};
-    const coinMap = {tether:'USDT',bitcoin:'BTC',ethereum:'ETH',binancecoin:'BNB'};
-    for (const [id,sym] of Object.entries(map)) {
-      if (!data[id]) continue;
-      const etb = data[id].usd * USD_ETB;
-      const ch  = data[id].usd_24h_change || 0;
-      liveRates[coinMap[id]] = etb;
-      const el=document.getElementById('rate-'+sym), ce=document.getElementById('change-'+sym);
-      if (el) el.textContent = etb>=1000 ? etb.toLocaleString('en',{maximumFractionDigits:0})+' ETB' : etb.toFixed(2)+' ETB';
-      if (ce) { ce.textContent=(ch>=0?'▲ +':'▼ ')+ch.toFixed(2)+'%'; ce.className='rate-change '+(ch>=0?'up':'down'); }
-    }
-    const r=liveRates[selectedCoin];
-    if (r) document.getElementById('marketRateHint').textContent=r.toLocaleString('en',{maximumFractionDigits:0})+' ETB';
-  } catch(e) { console.log('Rate fetch failed'); }
-}
-
-// ── Toast ─────────────────────────────────────────────────────────────────────
-function showToast(msg, type='success') {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast '+type+' show';
-  setTimeout(()=>t.className='toast '+type,2500);
-}
-
-// ── Start ─────────────────────────────────────────────────────────────────────
-init();
-setInterval(fetchRates, 300000);
-</script>
-</body>
-</html>
-<script>
-// Inject wallet page before </body>
-const walletHTML = `
-<div class="page" id="page-wallet" style="display:none;padding:20px;position:relative;z-index:1">
-  <div style="background:linear-gradient(135deg,#0d1f2e,#0f2a1e);border:1px solid rgba(0,229,160,0.15);border-radius:16px;padding:20px;margin-bottom:20px">
-    <div style="font-size:13px;color:var(--muted2);margin-bottom:4px">Total Balance</div>
-    <div style="font-family:'Bebas Neue';font-size:40px;color:var(--accent)" id="walletTotal">0.00</div>
-    <div style="font-size:11px;color:var(--muted2)">Across all networks</div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button onclick="switchPage('deposit')" style="flex:1;padding:12px;background:rgba(0,229,160,0.15);border:1px solid rgba(0,229,160,0.3);border-radius:10px;color:var(--accent);font-weight:700;font-size:13px;cursor:pointer">💰 Deposit</button>
-      <button onclick="switchPage('withdraw')" style="flex:1;padding:12px;background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);border-radius:10px;color:var(--red);font-weight:700;font-size:13px;cursor:pointer">💸 Withdraw</button>
-    </div>
-  </div>
-
-  <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Network Balances</div>
-
-  <div id="networkBalances">
-    ${['TRON','BSC','ETH','TON'].map(net => `
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:18px">
-          ${{TRON:'🔴',BSC:'🟡',ETH:'🔵',TON:'💎'}[net]}
-        </div>
-        <div>
-          <div style="font-weight:600;font-size:14px">${net}</div>
-          <div style="font-size:10px;color:var(--muted2)">${{TRON:'TRX / USDT',BSC:'BNB / USDT',ETH:'ETH / USDT',TON:'TON'}[net]}</div>
-        </div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-weight:700;font-size:14px;color:var(--accent)" id="bal-${net}">0.00</div>
-        <div style="font-size:10px;color:var(--muted2)">Available</div>
-      </div>
-    </div>`).join('')}
-  </div>
-
-  <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:16px 0 12px">Recent Transactions</div>
-  <div id="txHistory">
-    <div style="text-align:center;padding:24px;color:var(--muted)">No transactions yet</div>
-  </div>
-</div>
-
-<!-- DEPOSIT PAGE -->
-<div class="page" id="page-deposit" style="display:none;padding:20px;position:relative;z-index:1">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-    <button onclick="switchPage('wallet')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--muted2);cursor:pointer;font-size:12px">◀ Back</button>
-    <div style="font-size:18px;font-weight:700">💰 Deposit</div>
-  </div>
-
-  <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Select Network</div>
-
-  ${[
-    {net:'TRON',icon:'🔴',name:'TRON Network',coins:'TRX / USDT (TRC20)',addr:'tron_address'},
-    {net:'BSC', icon:'🟡',name:'BNB Smart Chain',coins:'BNB / USDT (BEP20)',addr:'bsc_address'},
-    {net:'ETH', icon:'🔵',name:'Ethereum',coins:'ETH / USDT (ERC20)',addr:'eth_address'},
-    {net:'TON', icon:'💎',name:'TON Network',coins:'TON',addr:'ton_address'},
-  ].map(n => `
-  <div onclick="showDepAddr('${n.net}','${n.addr}')" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer">
-    <div style="display:flex;align-items:center;gap:12px">
-      <span style="font-size:24px">${n.icon}</span>
-      <div><div style="font-weight:600">${n.name}</div><div style="font-size:11px;color:var(--muted2)">${n.coins}</div></div>
-    </div>
-    <span style="color:var(--muted2)">›</span>
-  </div>`).join('')}
-</div>
-
-<!-- DEPOSIT ADDRESS PAGE -->
-<div class="page" id="page-dep-addr" style="display:none;padding:20px;position:relative;z-index:1">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-    <button onclick="switchPage('deposit')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--muted2);cursor:pointer;font-size:12px">◀ Back</button>
-    <div style="font-size:18px;font-weight:700" id="depAddrTitle">Deposit</div>
-  </div>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;margin-bottom:16px">
-    <div style="font-size:12px;color:var(--muted2);margin-bottom:8px">Your deposit address</div>
-    <div id="depAddress" style="font-family:monospace;font-size:12px;color:var(--accent);word-break:break-all;background:var(--card2);padding:12px;border-radius:8px;margin-bottom:12px">Loading...</div>
-    <button onclick="copyAddr()" style="background:rgba(0,229,160,0.12);border:1px solid rgba(0,229,160,0.3);border-radius:8px;padding:8px 20px;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer">📋 Copy Address</button>
-  </div>
-  <div style="background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:10px;padding:14px;font-size:12px;color:var(--muted2);line-height:1.6" id="depWarning">
-    ⚠️ Only send the correct coin to this address.
-  </div>
-</div>
-
-<!-- WITHDRAW PAGE -->
-<div class="page" id="page-withdraw" style="display:none;padding:20px;position:relative;z-index:1">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-    <button onclick="switchPage('wallet')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--muted2);cursor:pointer;font-size:12px">◀ Back</button>
-    <div style="font-size:18px;font-weight:700">💸 Withdraw</div>
-  </div>
-  <div style="font-size:11px;color:var(--muted2);margin-bottom:16px">Use the bot command for full withdrawal flow:</div>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center">
-    <div style="font-size:32px;margin-bottom:12px">🤖</div>
-    <div style="font-weight:700;margin-bottom:8px">Withdraw via Bot</div>
-    <div style="font-size:12px;color:var(--muted2);margin-bottom:16px">Tap below to open the withdrawal flow in the bot</div>
-    <button onclick="if(window.Telegram?.WebApp) window.Telegram.WebApp.sendData(JSON.stringify({action:'withdraw'}))" style="background:linear-gradient(135deg,var(--red),#c0392b);color:#fff;font-weight:700;font-size:14px;padding:14px 28px;border:none;border-radius:12px;cursor:pointer;width:100%">💸 Start Withdrawal</button>
-  </div>
-</div>
-`;
-
-// Inject wallet pages
-document.body.insertAdjacentHTML('beforeend', walletHTML);
-
-// Show deposit address
-let currentWallet = null;
-async function showDepAddr(network, addrKey) {
-  switchPage('dep-addr');
-  document.getElementById('depAddrTitle').textContent = `Deposit — ${network}`;
-  document.getElementById('depAddress').textContent = 'Loading...';
-  try {
-    if (!currentWallet && window.TG_ID) {
-      const res = await fetch(API_BASE + '/api/wallet?tg_id=' + window.TG_ID);
-      currentWallet = await res.json();
-    }
-    const addr = currentWallet?.[addrKey] || 'Register via bot first';
-    document.getElementById('depAddress').textContent = addr;
-    const warnings = {
-      TRON: '⚠️ Only send TRX or USDT (TRC20) to this address. Minimum: 1 USDT / 10 TRX. 20 confirmations required.',
-      BSC:  '⚠️ Only send BNB or USDT (BEP20) to this address. Minimum: 0.01 BNB / 5 USDT. 15 confirmations required.',
-      ETH:  '⚠️ Only send ETH or USDT (ERC20) to this address. Minimum: 0.005 ETH / 10 USDT. 12 confirmations required.',
-      TON:  '⚠️ Only send TON to this address. Minimum: 1 TON. 5 confirmations required.',
-    };
-    document.getElementById('depWarning').textContent = warnings[network] || '';
-  } catch(e) {
-    document.getElementById('depAddress').textContent = 'Open bot and use /start to activate wallet';
+  const btn = document.getElementById('pm-' + pm);
+  if (selectedPMs.has(pm)) {
+    selectedPMs.delete(pm);
+    btn.classList.remove('active');
+  } else {
+    selectedPMs.add(pm);
+    btn.classList.add('active');
   }
 }
 
-function copyAddr() {
-  const addr = document.getElementById('depAddress').textContent;
-  navigator.clipboard.writeText(addr).then(() => showToast('📋 Address copied!', 'success'));
+// ── Submit trade ──
+function submitTrade() {
+  const amount = document.getElementById('tradeAmount').value;
+  const rate   = document.getElementById('tradeRate').value;
+  const min    = document.getElementById('tradeMin').value;
+  const max    = document.getElementById('tradeMax').value;
+  if (!amount || !rate || !min || !max) {
+    showToast('⚠️ Please fill all fields', 'error'); return;
+  }
+  if (selectedPMs.size === 0) {
+    showToast('⚠️ Select a payment method', 'error'); return;
+  }
+  // Send data to bot via Telegram WebApp
+  if (tg) {
+    tg.sendData(JSON.stringify({
+      action: 'post_trade',
+      type: selectedType,
+      coin: selectedCoin,
+      amount, rate, min, max,
+      payments: Array.from(selectedPMs)
+    }));
+  }
+  showToast('✅ Trade posted successfully!', 'success');
+  setTimeout(() => switchPage('browse'), 1500);
 }
 
-// Expose TG_ID globally
-window.TG_ID = TG_ID;
+// ── Trade modal ──
+function openTradeModal(type, ref, traderName, initial, amount, coin, rate, payment, min, max, rating, trades) {
+  const total = (amount * rate).toLocaleString();
+  const isBuy = type === 'sell'; // if trade is sell, user is buying
+  document.getElementById('modalTitle').textContent = isBuy ? '🛒 Buy ' + coin : '💸 Sell ' + coin;
+  document.getElementById('modalContent').innerHTML = `
+    <div style="background:var(--card2);border-radius:12px;padding:16px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+        <span style="color:var(--muted2);font-size:13px;">Amount</span>
+        <span style="font-weight:700">${amount} ${coin}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+        <span style="color:var(--muted2);font-size:13px;">Rate</span>
+        <span style="font-weight:700;color:var(--accent2)">${rate.toLocaleString()} ETB</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+        <span style="color:var(--muted2);font-size:13px;">Total</span>
+        <span style="font-weight:700;color:var(--accent)">${total} ETB</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;">
+        <span style="color:var(--muted2);font-size:13px;">Payment</span>
+        <span style="font-weight:600;font-size:12px">${payment}</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card2);border-radius:12px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent4),var(--accent));
+                  display:flex;align-items:center;justify-content:center;font-weight:700;color:#000">${initial}</div>
+      <div>
+        <div style="font-weight:600;font-size:14px">${traderName}</div>
+        <div style="font-size:11px;color:var(--accent2)">⭐ ${rating} · ${trades} trades · ✅ Verified</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.15);border-radius:10px;font-size:12px;color:var(--muted2);">
+      🔒 Crypto will be locked in escrow until payment is confirmed
+    </div>
+  `;
+  document.getElementById('modalBtn').textContent = isBuy ? '✅ Confirm Purchase' : '✅ Confirm Sale';
+  document.getElementById('modalBtn').onclick = () => {
+    if (tg) tg.sendData(JSON.stringify({ action: 'start_trade', trade_ref: ref }));
+    document.getElementById('tradeModal').classList.remove('open');
+    showToast('🔒 Escrow activated!', 'success');
+    setTimeout(() => switchPage('orders'), 1200);
+  };
+  document.getElementById('tradeModal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('tradeModal'))
+    document.getElementById('tradeModal').classList.remove('open');
+}
+
+// ── Toast ──
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.className = 'toast ' + type, 2500);
+}
+
+// ── Live rates ──
+const USD_ETB = 135;
+let liveRates = {};
+async function fetchRates() {
+  try {
+    const res = await fetch(
+      'https://api.coingecko.com/api/v3/simple/price?ids=tether,bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true'
+    );
+    const data = await res.json();
+    const map = {
+      'tether': 'usdt', 'bitcoin': 'btc',
+      'ethereum': 'eth', 'binancecoin': 'bnb'
+    };
+    const coinMap = {
+      'tether':'USDT','bitcoin':'BTC','ethereum':'ETH','binancecoin':'BNB'
+    };
+    for (const [id, sym] of Object.entries(map)) {
+      if (!data[id]) continue;
+      const usd = data[id].usd;
+      const etb = usd * USD_ETB;
+      const change = data[id].usd_24h_change || 0;
+      liveRates[coinMap[id]] = etb;
+      const el = document.getElementById('rate-' + sym);
+      const ch = document.getElementById('change-' + sym);
+      if (el) el.textContent = etb >= 1000
+        ? etb.toLocaleString('en', {maximumFractionDigits:0}) + ' ETB'
+        : etb.toFixed(2) + ' ETB';
+      if (ch) {
+        ch.textContent = (change >= 0 ? '▲ +' : '▼ ') + change.toFixed(2) + '%';
+        ch.className = 'rate-change ' + (change >= 0 ? 'up' : 'down');
+      }
+    }
+    // Update market rate hint on post page
+    const rate = liveRates[selectedCoin];
+    if (rate) document.getElementById('marketRateHint').textContent =
+      rate.toLocaleString('en',{maximumFractionDigits:0}) + ' ETB';
+  } catch(e) {
+    document.querySelectorAll('[id^="rate-"]').forEach(el => {
+      if (!el.textContent || el.textContent === 'Loading...')
+        el.textContent = 'N/A';
+    });
+  }
+}
+
+fetchRates();
+setInterval(fetchRates, 300000); // refresh every 5 min
 </script>
+</body>
+</html>
