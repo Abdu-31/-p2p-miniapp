@@ -11,60 +11,44 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);font-family:'Space Grotesk',sans-serif;color:var(--text);min-height:100vh;padding-bottom:72px;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 20% 0%,rgba(0,229,160,0.07),transparent),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(74,158,255,0.05),transparent);pointer-events:none;z-index:0}
-/* Header */
 .hdr{position:sticky;top:0;z-index:100;background:rgba(8,12,20,0.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
 .hdr-left{display:flex;align-items:center;gap:10px}
 .hdr-logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),#00a870);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#000}
-.hdr-title{font-size:14px;font-weight:700}
-.hdr-sub{font-size:9px;color:var(--muted2)}
+.hdr-title{font-size:14px;font-weight:700}.hdr-sub{font-size:9px;color:var(--muted2)}
 .live-badge{background:rgba(0,229,160,0.12);border:1px solid rgba(0,229,160,0.25);color:var(--accent);font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px}
-/* Nav */
 .nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(8,12,20,0.96);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(6,1fr);padding:6px 0 10px}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;font-size:8px;font-weight:700;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.3px}
 .nav-item .ni{font-size:18px;transition:transform 0.2s}
-.nav-item.active{color:var(--accent)}
-.nav-item.active .ni{transform:scale(1.15)}
-/* Pages */
-.pg{display:none;padding:16px;position:relative;z-index:1;animation:fi 0.25s ease}
-.pg.active{display:block}
+.nav-item.active{color:var(--accent)}.nav-item.active .ni{transform:scale(1.15)}
+.pg{display:none;padding:16px;position:relative;z-index:1;animation:fi 0.25s ease}.pg.active{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-/* Cards */
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
-.card.sell{border-left:3px solid var(--red)}
-.card.buy{border-left:3px solid var(--accent)}
-/* Typography */
+.card.sell{border-left:3px solid var(--red)}.card.buy{border-left:3px solid var(--accent)}
 .sec-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
-/* Welcome bar */
 .welcome{background:linear-gradient(135deg,#0d1f2e,#0f2a1e);border:1px solid rgba(0,229,160,0.15);border-radius:14px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
 .welcome::before{content:'🇪🇹';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:44px;opacity:0.15}
 .welcome-name{font-size:18px;font-weight:700;margin-bottom:3px}
 .welcome-id{font-size:10px;color:var(--muted2);font-family:monospace}
 .tier-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.2);color:var(--accent);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:8px}
-/* Stats */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
 .stat-lbl{font-size:9px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
 .stat-val{font-family:'Bebas Neue';font-size:30px;line-height:1}
 .stat-sub{font-size:9px;color:var(--muted);margin-top:3px}
-.green{color:var(--accent)} .yellow{color:var(--accent2)} .blue{color:var(--blue)} .red{color:var(--red)}
-/* Rate rows */
+.green{color:var(--accent)}.yellow{color:var(--accent2)}.blue{color:var(--blue)}.red{color:var(--red)}
 .rate-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
 .rate-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
 .rate-row:last-child{border-bottom:none}
 .rate-coin{display:flex;align-items:center;gap:9px}
 .coin-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px}
-.coin-name{font-weight:600;font-size:13px}
-.coin-sym{font-size:9px;color:var(--muted2)}
+.coin-name{font-weight:600;font-size:13px}.coin-sym{font-size:9px;color:var(--muted2)}
 .rate-etb{font-weight:700;font-size:13px;text-align:right}
-.rate-chg{font-size:9px;margin-top:1px}
-.rate-chg.up{color:var(--accent)} .rate-chg.dn{color:var(--red)}
-/* Filter bar */
+.rate-chg{font-size:9px;margin-top:1px}.rate-chg.up{color:var(--accent)}.rate-chg.dn{color:var(--red)}
 .fbar{display:flex;gap:7px;overflow-x:auto;padding-bottom:10px;margin-bottom:14px;scrollbar-width:none}
 .fbar::-webkit-scrollbar{display:none}
 .fchip{flex-shrink:0;background:var(--card);border:1px solid var(--border);color:var(--muted2);font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;cursor:pointer;white-space:nowrap}
 .fchip.active{background:rgba(0,229,160,0.12);border-color:rgba(0,229,160,0.4);color:var(--accent)}
-/* Trade cards */
 .trade-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .type-badge{font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 9px;border-radius:20px}
 .type-badge.sell{background:rgba(255,77,109,0.12);border:1px solid rgba(255,77,109,0.3);color:var(--red)}
@@ -72,17 +56,34 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .tref{font-size:9px;color:var(--muted);font-family:monospace}
 .t-amount{font-family:'Bebas Neue';font-size:26px;letter-spacing:1px}
 .t-coin{font-size:13px;font-weight:600;color:var(--muted2);margin-left:5px}
-.t-rate{font-size:11px;color:var(--muted2);margin-bottom:7px}
-.t-rate span{color:var(--accent2);font-weight:600}
+.t-rate{font-size:11px;color:var(--muted2);margin-bottom:7px}.t-rate span{color:var(--accent2);font-weight:600}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .chip{font-size:9px;background:var(--card2);border:1px solid var(--border);padding:3px 7px;border-radius:5px;color:var(--muted2)}
 .trade-foot{display:flex;align-items:center;justify-content:space-between}
 .trader-row{display:flex;align-items:center;gap:7px}
 .t-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000}
-.t-name{font-size:11px;font-weight:600}
-.t-rating{font-size:9px;color:var(--accent2)}
+.t-name{font-size:11px;font-weight:600}.t-rating{font-size:9px;color:var(--accent2)}
 .tbtn{background:linear-gradient(135deg,var(--accent),#00c882);color:#000;font-weight:700;font-size:11px;padding:7px 14px;border-radius:9px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif}
 .tbtn.sell{background:linear-gradient(135deg,var(--red),#c0392b);color:#fff}
+/* Order cards */
+.order-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.order-card.escrow_locked{border-left:3px solid var(--blue)}
+.order-card.payment_sent{border-left:3px solid var(--accent2)}
+.order-card.completed{border-left:3px solid var(--accent)}
+.order-card.disputed{border-left:3px solid var(--red)}
+.order-card.pending{border-left:3px solid var(--muted)}
+.order-status{font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:10px;text-transform:uppercase}
+.st-escrow{background:rgba(74,158,255,0.15);color:var(--blue)}
+.st-payment{background:rgba(245,166,35,0.15);color:var(--accent2)}
+.st-done{background:rgba(0,229,160,0.15);color:var(--accent)}
+.st-dispute{background:rgba(255,77,109,0.15);color:var(--red)}
+.st-pending{background:rgba(90,112,144,0.15);color:var(--muted2)}
+.order-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.o-btn{padding:10px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;text-align:center;border:none;font-family:'Space Grotesk',sans-serif}
+.o-btn.pay{background:linear-gradient(135deg,var(--accent),#00c882);color:#000}
+.o-btn.dispute{background:rgba(255,77,109,0.12);border:1px solid rgba(255,77,109,0.3);color:var(--red)}
+.o-btn.confirm{background:linear-gradient(135deg,var(--blue),#2980b9);color:#fff}
+.o-btn.cancel{background:rgba(90,112,144,0.1);border:1px solid var(--border);color:var(--muted2)}
 /* Forms */
 .type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
 .type-btn{padding:13px;border-radius:11px;border:2px solid var(--border);background:var(--card);color:var(--muted2);font-size:13px;font-weight:700;cursor:pointer;text-align:center;font-family:'Space Grotesk',sans-serif}
@@ -95,17 +96,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .form-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted2);text-transform:uppercase;margin-bottom:7px;display:block}
 .inp{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px 14px;color:var(--text);font-size:15px;font-family:'Space Grotesk',sans-serif;outline:none}
 .inp:focus{border-color:rgba(0,229,160,0.4)}
-.inp-hint{font-size:9px;color:var(--muted);margin-top:5px}
-.inp-hint span{color:var(--accent2);font-weight:600}
+.inp-hint{font-size:9px;color:var(--muted);margin-top:5px}.inp-hint span{color:var(--accent2);font-weight:600}
 .inp-group{margin-bottom:14px}
-.pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
+.pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
 .pm-btn{padding:11px;border-radius:11px;border:2px solid var(--border);background:var(--card);color:var(--muted2);font-size:11px;font-weight:600;cursor:pointer;text-align:center;font-family:'Space Grotesk',sans-serif}
 .pm-btn.active{border-color:var(--accent2);background:rgba(245,166,35,0.1);color:var(--accent2)}
+.pm-acc-section{background:var(--card2);border:1px solid rgba(245,166,35,0.2);border-radius:11px;padding:14px;margin-bottom:14px;display:none}
+.pm-acc-section.show{display:block}
 .sub-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--accent),#00c882);color:#000;font-size:15px;font-weight:800;border:none;border-radius:13px;cursor:pointer;font-family:'Space Grotesk',sans-serif;margin-bottom:10px}
-.sub-btn.danger{background:linear-gradient(135deg,var(--red),#c0392b);color:#fff}
-/* Payment account input */
-.pm-account-section{background:var(--card2);border:1px solid rgba(245,166,35,0.2);border-radius:11px;padding:14px;margin-bottom:14px;display:none}
-.pm-account-section.show{display:block}
 /* Profile */
 .prof-hdr{background:linear-gradient(135deg,#0d1f35,#0a1f15);border:1px solid rgba(74,158,255,0.15);border-radius:14px;padding:22px 18px;text-align:center;margin-bottom:14px}
 .prof-avatar{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#000;margin:0 auto 10px;border:3px solid rgba(255,255,255,0.1)}
@@ -125,33 +123,37 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .w-btn.wd{background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);color:var(--red)}
 .net-row{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
 .net-icon{font-size:22px;margin-right:10px}
-.net-name{font-weight:600;font-size:13px}
-.net-coins{font-size:9px;color:var(--muted2)}
+.net-name{font-weight:600;font-size:13px}.net-coins{font-size:9px;color:var(--muted2)}
 .net-bal{font-weight:700;font-size:13px;color:var(--accent);text-align:right}
-/* Address box */
 .addr-box{background:var(--card2);border:1px solid rgba(0,229,160,0.2);border-radius:11px;padding:14px;margin-bottom:12px;word-break:break-all;font-family:monospace;font-size:11px;color:var(--accent);text-align:center}
 .warn-box{background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);border-radius:10px;padding:12px;font-size:11px;color:var(--muted2);line-height:1.6}
-/* History items */
 .hist-item{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:13px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
 .h-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-right:10px}
-.h-ref{font-size:11px;font-weight:600}
-.h-date{font-size:9px;color:var(--muted);margin-top:1px}
-.h-amt{font-weight:700;font-size:13px;text-align:right}
-.h-etb{font-size:9px;color:var(--muted2);margin-top:1px}
-/* Back button */
+.h-ref{font-size:11px;font-weight:600}.h-date{font-size:9px;color:var(--muted);margin-top:1px}
+.h-amt{font-weight:700;font-size:13px;text-align:right}.h-etb{font-size:9px;color:var(--muted2);margin-top:1px}
 .back-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted2);cursor:pointer;font-size:11px;font-family:'Space Grotesk',sans-serif;margin-bottom:16px}
 /* Modal */
-.modal-ov{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);align-items:flex-end}
+.modal-ov{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:flex-end}
 .modal-ov.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:22px 22px 0 0;padding:22px 18px 36px;width:100%}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:22px 22px 0 0;padding:22px 18px 36px;width:100%;max-height:85vh;overflow-y:auto}
 .modal-handle{width:38px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 18px}
 .modal-title{font-size:17px;font-weight:700;margin-bottom:14px}
+/* Payment info box */
+.pay-info-box{background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.2);border-radius:10px;padding:14px;margin:10px 0}
+.pay-info-title{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.pay-info-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.pay-info-row:last-child{border-bottom:none}
+.pay-info-key{font-size:11px;color:var(--muted2)}
+.pay-info-val{font-size:12px;font-weight:700;color:var(--text)}
+/* KYC */
+.kyc-card{background:linear-gradient(135deg,rgba(74,158,255,0.08),rgba(0,229,160,0.05));border:1px solid rgba(74,158,255,0.2);border-radius:12px;padding:16px;margin-bottom:12px}
+.kyc-title{font-size:13px;font-weight:700;margin-bottom:6px}
+.kyc-desc{font-size:11px;color:var(--muted2);line-height:1.5;margin-bottom:12px}
+.kyc-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--blue),#2980b9);color:#fff;font-weight:700;font-size:13px;border:none;border-radius:10px;cursor:pointer;font-family:'Space Grotesk',sans-serif}
 /* Toast */
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:11px 18px;font-size:12px;font-weight:600;z-index:300;opacity:0;transition:all 0.25s;white-space:nowrap;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.ok{border-color:rgba(0,229,160,0.4);color:var(--accent)}
-.toast.err{border-color:rgba(255,77,109,0.4);color:var(--red)}
-/* Loading */
+.toast.ok{border-color:rgba(0,229,160,0.4);color:var(--accent)}.toast.err{border-color:rgba(255,77,109,0.4);color:var(--red)}
 .loading{text-align:center;padding:36px;color:var(--muted)}
 .spin{font-size:28px;display:block;margin-bottom:10px;animation:sp 1s linear infinite}
 @keyframes sp{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
@@ -161,7 +163,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="hdr">
   <div class="hdr-left">
     <div class="hdr-logo">P</div>
@@ -181,7 +182,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="stat"><div class="stat-lbl">Completed</div><div class="stat-val green" id="sCom">-</div><div class="stat-sub">trades</div></div>
     <div class="stat"><div class="stat-lbl">Rating</div><div class="stat-val yellow" id="sRat">-</div><div class="stat-sub">out of 5.0</div></div>
     <div class="stat"><div class="stat-lbl">Volume</div><div class="stat-val blue" id="sVol">-</div><div class="stat-sub">ETB traded</div></div>
-    <div class="stat"><div class="stat-lbl">Disputes</div><div class="stat-val red" id="sDis">0</div><div class="stat-sub">clean record</div></div>
+    <div class="stat"><div class="stat-lbl">Disputes</div><div class="stat-val red">0</div><div class="stat-sub">clean record</div></div>
   </div>
   <div class="sec-label">Live Rates</div>
   <div class="rate-card">
@@ -243,21 +244,26 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <button class="pm-btn" id="pm-Dashen" onclick="togPM('Dashen')">🏦 Dashen</button>
     <button class="pm-btn" id="pm-Cash" onclick="togPM('Cash')">💵 Cash</button>
   </div>
-  <!-- Payment Account Numbers -->
-  <div class="pm-account-section" id="pmAccSection">
-    <div class="sec-label" style="margin-bottom:10px">Your Account Numbers</div>
-    <div class="inp-hint" style="margin-bottom:10px;font-size:10px;color:var(--muted2)">Add your account/phone numbers so buyers know where to send payment</div>
+  <!-- FIX 4: Payment account numbers -->
+  <div class="pm-acc-section" id="pmAccSection">
+    <div class="sec-label" style="margin-bottom:10px">💳 Your Payment Account Numbers</div>
+    <div style="font-size:10px;color:var(--muted2);margin-bottom:10px">These will be shown to the buyer so they know where to send payment</div>
     <div id="pmAccInputs"></div>
   </div>
   <button class="sub-btn" onclick="postTrade()">🚀 Post Trade</button>
 </div>
 
-<!-- ORDERS -->
+<!-- ORDERS — FIX 2 & 3 -->
 <div class="pg" id="pg-orders">
+  <div class="fbar">
+    <div class="fchip active" id="of-all" onclick="setOrderFilter(this,'all')">All</div>
+    <div class="fchip" id="of-active" onclick="setOrderFilter(this,'active')">🔒 Active</div>
+    <div class="fchip" id="of-done" onclick="setOrderFilter(this,'completed')">✅ Done</div>
+  </div>
   <div id="ordersList"><div class="loading"><span class="spin">⏳</span>Loading orders...</div></div>
 </div>
 
-<!-- PROFILE -->
+<!-- PROFILE — FIX 5: KYC -->
 <div class="pg" id="pg-profile">
   <div class="prof-hdr">
     <div class="prof-avatar" id="pAvatar">?</div>
@@ -270,7 +276,16 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="prof-stats">
     <div class="ps"><div class="ps-val" id="psCom">-</div><div class="ps-lbl">Completed</div></div>
     <div class="ps"><div class="ps-val" style="color:var(--accent2)" id="psCan">-</div><div class="ps-lbl">Cancelled</div></div>
-    <div class="ps"><div class="ps-val" style="color:var(--red)" id="psDis">0</div><div class="ps-lbl">Disputes</div></div>
+    <div class="ps"><div class="ps-val" style="color:var(--red)">0</div><div class="ps-lbl">Disputes</div></div>
+  </div>
+  <!-- KYC Card -->
+  <div class="kyc-card" id="kycCard">
+    <div class="kyc-title">🪪 Identity Verification (KYC)</div>
+    <div class="kyc-desc" id="kycDesc">
+      Get a ✅ verified badge, higher trust from traders, and higher trade limits.<br>
+      <strong>This is optional</strong> — you can trade without it.
+    </div>
+    <button class="kyc-btn" id="kycBtn" onclick="startKYC()">🪪 Start KYC Verification</button>
   </div>
   <div class="sec-label">Account Details</div>
   <div class="rate-card">
@@ -278,27 +293,22 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="rate-row"><span style="color:var(--muted2);font-size:12px">💰 Total Volume</span><span style="font-weight:600;font-size:12px" id="pVol">...</span></div>
     <div class="rate-row"><span style="color:var(--muted2);font-size:12px">🏆 Status</span><span style="font-weight:600;font-size:12px" id="pStatus">...</span></div>
   </div>
-  <button class="sub-btn" style="background:linear-gradient(135deg,var(--blue),#2980b9)" onclick="showToast('🏅 VIP application sent!','ok')">🏅 Apply for VIP</button>
+  <button class="sub-btn" style="background:linear-gradient(135deg,var(--blue),#2980b9)" onclick="showToast('🏅 VIP application sent to admin!','ok')">🏅 Apply for VIP</button>
 </div>
 
-<!-- WALLET -->
+<!-- WALLET — FIX 1 -->
 <div class="pg" id="pg-wallet">
   <div class="wallet-hero">
     <div style="font-size:11px;color:var(--muted2);margin-bottom:4px">Internal Balance</div>
-    <div class="wallet-total" id="wTotal">0.00</div>
+    <div class="wallet-total">0.00</div>
     <div style="font-size:10px;color:var(--muted2);margin-top:4px">Confirmed across all networks</div>
     <div class="wallet-actions">
       <button class="w-btn dep" onclick="goTo('deposit')">💰 Deposit</button>
       <button class="w-btn wd" onclick="goTo('withdraw')">💸 Withdraw</button>
     </div>
   </div>
-  <div class="sec-label">Network Balances</div>
-  <div id="netBals">
-    <div class="net-row" onclick="goTo('deposit')"><div style="display:flex;align-items:center"><span class="net-icon">🔴</span><div><div class="net-name">TRON</div><div class="net-coins">TRX / USDT</div></div></div><div><div class="net-bal" id="nb-TRON">0.00</div><div style="font-size:9px;color:var(--muted2)">Available</div></div></div>
-    <div class="net-row" onclick="goTo('deposit')"><div style="display:flex;align-items:center"><span class="net-icon">🟡</span><div><div class="net-name">BSC</div><div class="net-coins">BNB / USDT</div></div></div><div><div class="net-bal" id="nb-BSC">0.00</div><div style="font-size:9px;color:var(--muted2)">Available</div></div></div>
-    <div class="net-row" onclick="goTo('deposit')"><div style="display:flex;align-items:center"><span class="net-icon">🔵</span><div><div class="net-name">ETH</div><div class="net-coins">ETH / USDT</div></div></div><div><div class="net-bal" id="nb-ETH">0.00</div><div style="font-size:9px;color:var(--muted2)">Available</div></div></div>
-    <div class="net-row" onclick="goTo('deposit')"><div style="display:flex;align-items:center"><span class="net-icon">💎</span><div><div class="net-name">TON</div><div class="net-coins">TON</div></div></div><div><div class="net-bal" id="nb-TON">0.00</div><div style="font-size:9px;color:var(--muted2)">Available</div></div></div>
-  </div>
+  <div class="sec-label">Your Wallet Addresses</div>
+  <div id="walletAddresses"><div class="loading" style="padding:20px"><span class="spin">⏳</span>Loading...</div></div>
 </div>
 
 <!-- DEPOSIT -->
@@ -317,27 +327,22 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="sec-label" id="dAddrTitle">Deposit Address</div>
   <div style="text-align:center;margin-bottom:14px">
     <div style="font-size:32px;margin-bottom:8px" id="dAddrIcon">🔴</div>
-    <div style="font-size:11px;color:var(--muted2);margin-bottom:12px" id="dAddrCoins">TRX / USDT</div>
+    <div style="font-size:11px;color:var(--muted2);margin-bottom:12px" id="dAddrCoins"></div>
     <div class="addr-box" id="dAddr">Loading...</div>
     <button onclick="copyAddr()" style="background:rgba(0,229,160,0.12);border:1px solid rgba(0,229,160,0.3);border-radius:9px;padding:9px 20px;color:var(--accent);font-weight:700;font-size:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif">📋 Copy Address</button>
   </div>
-  <div class="warn-box" id="dWarn">⚠️ Only send the correct coin to this address.</div>
-  <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:12px;margin-top:10px;font-size:11px;color:var(--muted2)">
-    🔄 Your balance updates automatically after blockchain confirmation.<br>Usually 5–15 minutes.
-  </div>
+  <div class="warn-box" id="dWarn"></div>
 </div>
 
 <!-- WITHDRAW -->
 <div class="pg" id="pg-withdraw">
-  <button class="back-btn" onclick="goTo('wallet')">◀ Back to Wallet</button>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:13px;padding:20px;text-align:center;margin-bottom:14px">
+  <button class="back-btn" onclick="goTo('wallet')">◀ Back</button>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:13px;padding:20px;text-align:center">
     <div style="font-size:28px;margin-bottom:10px">🤖</div>
     <div style="font-weight:700;margin-bottom:7px">Withdraw via Bot</div>
-    <div style="font-size:11px;color:var(--muted2);margin-bottom:14px;line-height:1.5">For security, withdrawals are processed through the bot. Tap below to start.</div>
+    <div style="font-size:11px;color:var(--muted2);margin-bottom:14px;line-height:1.5">Tap below to open withdrawal flow in the bot</div>
     <button onclick="sendToBot('withdraw')" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--red),#c0392b);color:#fff;font-weight:800;font-size:14px;border:none;border-radius:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif">💸 Start Withdrawal in Bot</button>
   </div>
-  <div class="sec-label">Your Balances</div>
-  <div id="wdBals"><div class="loading" style="padding:20px"><span class="spin">⏳</span></div></div>
 </div>
 
 <!-- NAV -->
@@ -350,39 +355,29 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="nav-item" id="nav-wallet" onclick="go('wallet')"><span class="ni">💰</span>Wallet</div>
 </nav>
 
-<!-- TRADE MODAL -->
+<!-- TRADE MODAL — FIX 3 & 4 -->
 <div class="modal-ov" id="tradeModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="mTitle">Confirm Trade</div>
+    <div class="modal-title" id="mTitle">Trade Details</div>
     <div id="mBody"></div>
-    <button class="sub-btn" id="mBtn" style="margin-top:14px">Confirm</button>
-    <button onclick="document.getElementById('tradeModal').classList.remove('open')" style="width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:11px;color:var(--muted2);font-size:13px;font-family:'Space Grotesk',sans-serif;cursor:pointer">Cancel</button>
+    <div id="mActions"></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────────────────
-// Set your Railway URL here or it will be asked on first open
-let API_BASE = localStorage.getItem('p2p_api') || 'https://sturdy-waddle-production-f4cb.up.railway.app';
-
-if (!API_BASE) {
-  const url = prompt('First time setup!\n\nEnter your Railway API URL:\n(e.g. https://sturdy-waddle-production.up.railway.app)');
-  if (url && url.trim()) {
-    API_BASE = url.trim().replace(/\/$/, '');
-    localStorage.setItem('p2p_api', API_BASE);
-  }
-}
-
+const API_BASE = 'https://sturdy-waddle-production-f4cb.up.railway.app';
 const USD_ETB = 135;
 const tg = window.Telegram?.WebApp;
-let TG_ID = null, TG_USER = {};
+let TG_ID = null, TG_USER = {}, currentUser = null;
 let liveRates = {}, currentWallet = null;
 let selType_ = 'buy', selCoin_ = 'USDT';
 const selPMs = new Set();
 const pmAccounts = {};
+let orderFilter = 'all';
+let allOrders = [];
 
 if (tg) {
   tg.ready(); tg.expand();
@@ -396,213 +391,293 @@ if (tg) {
 function go(name) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const pg = document.getElementById('pg-' + name);
-  const nav = document.getElementById('nav-' + name);
-  if (pg) pg.classList.add('active');
-  if (nav) nav.classList.add('active');
+  document.getElementById('pg-'+name)?.classList.add('active');
+  document.getElementById('nav-'+name)?.classList.add('active');
   if (name === 'browse') loadTrades();
   if (name === 'orders') loadOrders();
   if (name === 'wallet') loadWallet();
-  if (name === 'withdraw') loadWdBals();
+  if (name === 'profile') loadKYCStatus();
 }
 
 function goTo(name) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
-  const pg = document.getElementById('pg-' + name);
-  if (pg) pg.classList.add('active');
+  document.getElementById('pg-'+name)?.classList.add('active');
   if (name === 'wallet') loadWallet();
-  if (name === 'withdraw') loadWdBals();
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function init() {
   fetchRates();
-  if (TG_ID) await loadUser();
-  else setUserUI({full_name: TG_USER.first_name || 'Guest', telegram_id: 0, tier: 'new', tier_label: '🆕 New', completed_trades: 0, cancelled_trades: 0, rating: 0, volume_etb: 0, created_at: new Date().toISOString()});
+  if (TG_ID) {
+    await loadUser();
+    await loadWalletSilent(); // FIX 1: preload wallet on start
+  } else {
+    setUserUI({full_name:'Guest',telegram_id:0,tier:'new',tier_label:'🆕 New',completed_trades:0,cancelled_trades:0,rating:0,volume_etb:0,created_at:new Date().toISOString()});
+  }
 }
 
 // ── USER ──────────────────────────────────────────────────────────────────────
 async function loadUser() {
-  if (!API_BASE || !TG_ID) return;
+  if (!TG_ID) return;
   try {
     const res = await fetch(`${API_BASE}/api/user?tg_id=${TG_ID}`);
-    if (!res.ok) throw new Error();
-    setUserUI(await res.json());
-  } catch {
-    setUserUI({full_name: TG_USER.first_name || 'Guest', telegram_id: TG_ID, tier: 'new', tier_label: '🆕 New', completed_trades: 0, cancelled_trades: 0, rating: 0, volume_etb: 0, created_at: new Date().toISOString()});
-  }
+    if (res.ok) { currentUser = await res.json(); setUserUI(currentUser); }
+    else setGuestUI();
+  } catch { setGuestUI(); }
+}
+
+function setGuestUI() {
+  setUserUI({full_name:TG_USER.first_name||'Guest',telegram_id:TG_ID,tier:'new',tier_label:'🆕 New',completed_trades:0,cancelled_trades:0,rating:0,volume_etb:0,created_at:new Date().toISOString()});
 }
 
 function setUserUI(u) {
-  const name = u.full_name || 'Trader';
-  const first = name.split(' ')[0];
+  const name = u.full_name||'Trader', first = name.split(' ')[0];
   const init = name.charAt(0).toUpperCase();
-  const tid = String(u.telegram_id || 0).slice(-5);
-  const vol = fmtVol(u.volume_etb || 0);
-  const rating = Number(u.rating || 0).toFixed(1);
-  const stars = '⭐'.repeat(Math.min(5, Math.round(u.rating || 0))) || '☆☆☆☆☆';
-  const since = (u.created_at || '').slice(0, 7);
-
-  // Home
+  const tid = String(u.telegram_id||0).slice(-5);
+  const rating = Number(u.rating||0).toFixed(1);
+  const stars = '⭐'.repeat(Math.min(5,Math.round(u.rating||0)))||'☆☆☆☆☆';
+  const since = (u.created_at||'').slice(0,7);
   document.getElementById('wName').textContent = `Welcome, ${first} 👋`;
   document.getElementById('wId').textContent = `Trader ID: #ET${tid}`;
-  document.getElementById('wTier').textContent = u.tier_label || '🆕 New';
-  document.getElementById('sCom').textContent = u.completed_trades || 0;
+  document.getElementById('wTier').textContent = u.tier_label||'🆕 New';
+  document.getElementById('sCom').textContent = u.completed_trades||0;
   document.getElementById('sRat').textContent = rating;
-  document.getElementById('sVol').textContent = vol;
-
-  // Profile
+  document.getElementById('sVol').textContent = fmtVol(u.volume_etb||0);
   document.getElementById('pAvatar').textContent = init;
   document.getElementById('pName').textContent = name;
-  document.getElementById('pId').textContent = `#ET${tid} · @${TG_USER.username || 'user'}`;
-  document.getElementById('pTier').textContent = u.tier_label || '🆕 New';
+  document.getElementById('pId').textContent = `#ET${tid} · @${TG_USER.username||'user'}`;
+  document.getElementById('pTier').textContent = u.tier_label||'🆕 New';
   document.getElementById('pStars').textContent = stars;
   document.getElementById('pRating').textContent = `${rating} / 5.0`;
-  document.getElementById('psCom').textContent = u.completed_trades || 0;
-  document.getElementById('psCan').textContent = u.cancelled_trades || 0;
+  document.getElementById('psCom').textContent = u.completed_trades||0;
+  document.getElementById('psCan').textContent = u.cancelled_trades||0;
   document.getElementById('pSince').textContent = since;
-  document.getElementById('pVol').textContent = `${Number(u.volume_etb || 0).toLocaleString()} ETB`;
-  document.getElementById('pStatus').textContent = u.tier_label || '🆕 New';
+  document.getElementById('pVol').textContent = `${Number(u.volume_etb||0).toLocaleString()} ETB`;
+  document.getElementById('pStatus').textContent = u.tier_label||'🆕 New';
 }
 
-// ── TRADES ────────────────────────────────────────────────────────────────────
+// ── FIX 2: TRADES (show poster's own trades too) ──────────────────────────────
 let activeFilter = {};
-
 async function loadTrades() {
   const list = document.getElementById('tradesList');
-  list.innerHTML = '<div class="loading"><span class="spin">⏳</span>Loading trades...</div>';
-  if (!API_BASE) { list.innerHTML = '<div class="empty"><span class="empty-ic">⚙️</span>API not configured.<br>Reload and enter your Railway URL.</div>'; return; }
+  list.innerHTML = '<div class="loading"><span class="spin">⏳</span>Loading...</div>';
   try {
-    let url = `${API_BASE}/api/trades?limit=20`;
+    let url = `${API_BASE}/api/trades?limit=30`;
     if (activeFilter.type) url += `&type=${activeFilter.type}`;
     if (activeFilter.coin) url += `&coin=${activeFilter.coin.toUpperCase()}`;
     const res = await fetch(url);
     const trades = await res.json();
     if (!trades.length) { list.innerHTML = '<div class="empty"><span class="empty-ic">📭</span>No trades found.<br>Be first to post one!</div>'; return; }
     list.innerHTML = trades.map(t => tradeCardHTML(t)).join('');
-  } catch { list.innerHTML = '<div class="empty"><span class="empty-ic">⚠️</span>Could not load trades.<br>Check your Railway URL.</div>'; }
+  } catch(e) { list.innerHTML = '<div class="empty"><span class="empty-ic">⚠️</span>Could not load trades.</div>'; }
 }
 
 function tradeCardHTML(t) {
-  const sell = t.trade_type === 'sell';
-  const pms = (t.payment_list || t.payment_methods.split(',')).slice(0, 2).map(p => `<span class="chip">💳 ${p.trim()}</span>`).join('');
-  const init = (t.full_name || '?').charAt(0).toUpperCase();
+  const sell = t.trade_type==='sell';
+  const pms = (t.payment_list||t.payment_methods.split(',')).slice(0,2).map(p=>`<span class="chip">💳 ${p.trim()}</span>`).join('');
+  const init = (t.full_name||'?').charAt(0).toUpperCase();
+  const isMyTrade = TG_ID && String(t.poster_telegram_id||'') === String(TG_ID);
+  const myLabel = isMyTrade ? '<span class="chip" style="color:var(--accent);border-color:var(--accent)">📌 Your Trade</span>' : '';
   const data = encodeURIComponent(JSON.stringify(t));
-  return `<div class="card ${t.trade_type}" onclick="openModal('${data}')">
-    <div class="trade-top"><span class="type-badge ${t.trade_type}">${sell ? '📉 SELL' : '📈 BUY'}</span><span class="tref">#${t.trade_ref}</span></div>
+  return `<div class="card ${t.trade_type}" onclick="openTradeModal('${data}')">
+    <div class="trade-top"><span class="type-badge ${t.trade_type}">${sell?'📉 SELL':'📈 BUY'}</span><span class="tref">#${t.trade_ref}</span></div>
     <div style="margin-bottom:6px"><span class="t-amount">${t.amount}</span><span class="t-coin">${t.coin}</span></div>
     <div class="t-rate">Rate: <span>${Number(t.rate_etb).toLocaleString()} ETB</span>/${t.coin}</div>
-    <div class="chips">${pms}<span class="chip">📊 ${Number(t.min_etb).toLocaleString()}–${Number(t.max_etb).toLocaleString()} ETB</span></div>
+    <div class="chips">${pms}<span class="chip">📊 ${Number(t.min_etb).toLocaleString()}–${Number(t.max_etb).toLocaleString()} ETB</span>${myLabel}</div>
     <div class="trade-foot">
-      <div class="trader-row"><div class="t-avatar">${init}</div><div><div class="t-name">${t.full_name || 'Trader'}</div><div class="t-rating">⭐ ${Number(t.rating || 0).toFixed(1)} · ${t.completed_trades || 0} trades ${t.tier_icon || ''}</div></div></div>
-      <button class="tbtn ${sell ? '' : 'sell'}">${sell ? 'Buy' : 'Sell'}</button>
+      <div class="trader-row"><div class="t-avatar">${init}</div><div><div class="t-name">${t.full_name||'Trader'}</div><div class="t-rating">⭐ ${Number(t.rating||0).toFixed(1)} · ${t.completed_trades||0} trades ${t.tier_icon||''}</div></div></div>
+      ${isMyTrade ? '<span style="font-size:10px;color:var(--muted2)">Tap to view</span>' : `<button class="tbtn ${sell?'':'sell'}">${sell?'Buy':'Sell'}</button>`}
     </div>
   </div>`;
 }
 
 function setFilter(el, f) {
-  document.querySelectorAll('.fchip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
-  activeFilter = f === 'all' ? {} : ['sell','buy'].includes(f) ? {type:f} : {coin:f};
+  activeFilter = f==='all'?{}:['sell','buy'].includes(f)?{type:f}:{coin:f};
   loadTrades();
 }
 
-// ── ORDERS ────────────────────────────────────────────────────────────────────
+// ── FIX 2 & 3: ORDERS with action buttons ────────────────────────────────────
 async function loadOrders() {
   const list = document.getElementById('ordersList');
-  list.innerHTML = '<div class="loading"><span class="spin">⏳</span>Loading orders...</div>';
-  if (!TG_ID || !API_BASE) { list.innerHTML = '<div class="empty"><span class="empty-ic">🔒</span>Login via Telegram bot first.</div>'; return; }
+  list.innerHTML = '<div class="loading"><span class="spin">⏳</span>Loading...</div>';
+  if (!TG_ID) { list.innerHTML = '<div class="empty"><span class="empty-ic">🔒</span>Login via Telegram bot first.</div>'; return; }
   try {
-    const res = await fetch(`${API_BASE}/api/orders?tg_id=${TG_ID}`);
-    const orders = await res.json();
-    if (!orders.length) { list.innerHTML = '<div class="empty"><span class="empty-ic">📋</span>No orders yet.<br>Browse trades to start!</div>'; return; }
-    const colors = {completed:'var(--accent)',cancelled:'var(--red)',escrow_locked:'var(--blue)',payment_sent:'var(--accent2)',pending:'var(--muted)',disputed:'var(--red)'};
-    list.innerHTML = '<div class="sec-label">Your Orders</div>' + orders.map(o => {
-      const buy = o.is_buyer;
-      const dot = colors[o.status] || 'var(--muted)';
-      const sign = buy ? '-' : '+';
-      const col = buy ? 'var(--blue)' : 'var(--accent)';
-      const action = `${buy ? 'BUY' : 'SELL'} ${o.amount} ${o.coin}`;
-      return `<div class="hist-item">
-        <div style="display:flex;align-items:center">
-          <div class="h-dot" style="background:${dot}"></div>
-          <div><div class="h-ref">#${o.order_ref} · ${action}</div><div class="h-date">${(o.created_at||'').slice(0,10)} · ${o.status}</div></div>
-        </div>
-        <div><div class="h-amt" style="color:${col}">${sign}${Number(o.total_etb).toLocaleString()}</div><div class="h-etb">ETB</div></div>
-      </div>`;
-    }).join('');
+    const res = await fetch(`${API_BASE}/api/orders/detail?tg_id=${TG_ID}`);
+    if (!res.ok) throw new Error();
+    allOrders = await res.json();
+    renderOrders();
   } catch { list.innerHTML = '<div class="empty"><span class="empty-ic">⚠️</span>Could not load orders.</div>'; }
+}
+
+function setOrderFilter(el, f) {
+  document.querySelectorAll('#pg-orders .fchip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  orderFilter = f;
+  renderOrders();
+}
+
+function renderOrders() {
+  const list = document.getElementById('ordersList');
+  let orders = allOrders;
+  if (orderFilter === 'active') orders = orders.filter(o=>['pending','escrow_locked','payment_sent','disputed'].includes(o.status));
+  if (orderFilter === 'completed') orders = orders.filter(o=>['completed','cancelled'].includes(o.status));
+  if (!orders.length) { list.innerHTML = '<div class="empty"><span class="empty-ic">📋</span>No orders found.<br>Browse trades to start!</div>'; return; }
+  list.innerHTML = orders.map(o => orderCardHTML(o)).join('');
+}
+
+function orderCardHTML(o) {
+  const isBuyer = String(o.buyer_telegram_id) === String(TG_ID);
+  const action = `${isBuyer?'BUY':'SELL'} ${o.amount} ${o.coin}`;
+  const sign = isBuyer?'-':'+';
+  const col = isBuyer?'var(--blue)':'var(--accent)';
+  const stMap = {pending:'st-pending',escrow_locked:'st-escrow',payment_sent:'st-payment',completed:'st-done',cancelled:'st-pending',disputed:'st-dispute'};
+  const stLabel = {pending:'Pending',escrow_locked:'🔒 Escrow',payment_sent:'💸 Paid',completed:'✅ Done',cancelled:'Cancelled',disputed:'⚠️ Dispute'};
+  const dotCol = {completed:'var(--accent)',cancelled:'var(--red)',escrow_locked:'var(--blue)',payment_sent:'var(--accent2)',pending:'var(--muted)',disputed:'var(--red)'};
+
+  // Build action buttons based on status + role
+  let actions = '';
+  if (o.status === 'escrow_locked' && isBuyer) {
+    actions = `<div class="order-actions">
+      <button class="o-btn pay" onclick="orderAction('paid','${o.order_ref}')">✅ I've Sent Payment</button>
+      <button class="o-btn dispute" onclick="orderAction('dispute','${o.order_ref}')">⚠️ Dispute</button>
+    </div>`;
+  } else if (o.status === 'payment_sent' && !isBuyer) {
+    actions = `<div class="order-actions">
+      <button class="o-btn confirm" onclick="orderAction('received','${o.order_ref}')">✅ I Received Payment</button>
+      <button class="o-btn dispute" onclick="orderAction('notreceived','${o.order_ref}')">❌ Not Received</button>
+    </div>`;
+  } else if (o.status === 'payment_sent' && isBuyer) {
+    actions = `<div style="background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:10px;margin-top:10px;font-size:11px;color:var(--accent2);text-align:center">⏳ Waiting for seller to confirm receipt...</div>`;
+  } else if (o.status === 'escrow_locked' && !isBuyer) {
+    actions = `<div style="background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.2);border-radius:8px;padding:10px;margin-top:10px;font-size:11px;color:var(--blue);text-align:center">⏳ Waiting for buyer to send payment...</div>`;
+  }
+
+  // Show payment info for active escrow orders
+  let payInfo = '';
+  if (['escrow_locked','payment_sent'].includes(o.status)) {
+    payInfo = `<div class="pay-info-box">
+      <div class="pay-info-title">💳 Payment Info</div>
+      <div class="pay-info-row"><span class="pay-info-key">Method</span><span class="pay-info-val">${o.payment_method||'—'}</span></div>
+      <div class="pay-info-row"><span class="pay-info-key">Amount</span><span class="pay-info-val">${Number(o.total_etb).toLocaleString()} ETB</span></div>
+      <div class="pay-info-row"><span class="pay-info-key">${isBuyer?'Send to':'Receive from'}</span><span class="pay-info-val">${isBuyer?o.seller_name:o.buyer_name}</span></div>
+      ${o.payment_accounts ? buildAccounts(o.payment_accounts) : ''}
+    </div>`;
+  }
+
+  return `<div class="order-card ${o.status}">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="h-dot" style="background:${dotCol[o.status]||'var(--muted)'}"></div>
+        <div><div class="h-ref">#${o.order_ref} · ${action}</div><div class="h-date">${(o.created_at||'').slice(0,10)}</div></div>
+      </div>
+      <span class="order-status ${stMap[o.status]||'st-pending'}">${stLabel[o.status]||o.status}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted2);margin-bottom:8px">
+      <span>${isBuyer?'Seller':'Buyer'}: <strong style="color:var(--text)">${isBuyer?o.seller_name:o.buyer_name}</strong></span>
+      <span style="font-weight:700;color:${col}">${sign}${Number(o.total_etb).toLocaleString()} ETB</span>
+    </div>
+    ${payInfo}${actions}
+  </div>`;
+}
+
+function buildAccounts(accounts) {
+  try {
+    const acc = typeof accounts === 'string' ? JSON.parse(accounts) : accounts;
+    return Object.entries(acc).filter(([k,v])=>v).map(([k,v])=>
+      `<div class="pay-info-row"><span class="pay-info-key">${k}</span><span class="pay-info-val" onclick="copyText('${v}')">${v} 📋</span></div>`
+    ).join('');
+  } catch { return ''; }
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).catch(()=>{
+    const el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+  });
+  showToast('📋 Copied!','ok');
+}
+
+// FIX 3: Order action buttons send to bot
+function orderAction(action, orderRef) {
+  const actions = {
+    'paid': `✅ Mark payment sent for order #${orderRef}?`,
+    'received': `✅ Confirm you received payment for order #${orderRef}?`,
+    'notreceived': `❌ Report payment NOT received for order #${orderRef}?`,
+    'dispute': `⚠️ Open dispute for order #${orderRef}?`,
+  };
+  if (!confirm(actions[action]||'Confirm?')) return;
+  if (tg) {
+    tg.sendData(JSON.stringify({action: `order_${action}`, order_ref: orderRef}));
+    showToast('✅ Sent to bot for processing','ok');
+    setTimeout(loadOrders, 2000);
+  } else {
+    showToast('⚠️ Open in Telegram app','err');
+  }
 }
 
 // ── POST TRADE ────────────────────────────────────────────────────────────────
 function selType(t) {
   selType_ = t;
-  document.getElementById('btnBuy').className = 'type-btn buy' + (t==='buy'?' active':'');
-  document.getElementById('btnSell').className = 'type-btn sell' + (t==='sell'?' active':'');
+  document.getElementById('btnBuy').className = 'type-btn buy'+(t==='buy'?' active':'');
+  document.getElementById('btnSell').className = 'type-btn sell'+(t==='sell'?' active':'');
 }
-
 function selCoin(c) {
   selCoin_ = c;
-  document.querySelectorAll('.coin-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.coin-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('cn-'+c).classList.add('active');
   document.getElementById('cHint').textContent = c;
   const r = liveRates[c];
   document.getElementById('mRate').textContent = r ? r.toLocaleString('en',{maximumFractionDigits:0})+' ETB' : 'loading...';
 }
-
 function togPM(pm) {
   const btn = document.getElementById('pm-'+pm);
-  if (selPMs.has(pm)) { selPMs.delete(pm); btn.classList.remove('active'); }
+  if (selPMs.has(pm)) { selPMs.delete(pm); btn.classList.remove('active'); delete pmAccounts[pm]; }
   else { selPMs.add(pm); btn.classList.add('active'); }
   updatePMAccSection();
 }
-
 function updatePMAccSection() {
   const sec = document.getElementById('pmAccSection');
-  const inputs = document.getElementById('pmAccInputs');
-  if (selPMs.size === 0) { sec.classList.remove('show'); return; }
+  const inp = document.getElementById('pmAccInputs');
+  if (!selPMs.size) { sec.classList.remove('show'); return; }
   sec.classList.add('show');
-  inputs.innerHTML = Array.from(selPMs).map(pm => `
+  inp.innerHTML = Array.from(selPMs).map(pm=>`
     <div class="inp-group">
-      <label class="form-lbl">${pm} Account / Phone Number</label>
-      <input type="text" class="inp" id="acc-${pm}"
-        placeholder="${pm === 'Cash' ? 'Location or note' : 'e.g. 0912345678'}"
-        value="${pmAccounts[pm] || ''}"
-        oninput="pmAccounts['${pm}']=this.value"
-        inputmode="${pm === 'Cash' ? 'text' : 'tel'}"/>
+      <label class="form-lbl">${pm} Account / Phone</label>
+      <input type="text" class="inp" placeholder="${pm==='Cash'?'Location/note':'e.g. 0912345678'}"
+        value="${pmAccounts[pm]||''}" oninput="pmAccounts['${pm}']=this.value"
+        inputmode="${pm==='Cash'?'text':'tel'}"/>
     </div>`).join('');
 }
-
 function postTrade() {
-  const amt = document.getElementById('tAmt').value;
-  const rate = document.getElementById('tRate').value;
-  const min = document.getElementById('tMin').value;
-  const max = document.getElementById('tMax').value;
-  if (!amt || !rate || !min || !max) { showToast('⚠️ Fill all fields', 'err'); return; }
-  if (!selPMs.size) { showToast('⚠️ Select payment method', 'err'); return; }
-  const data = {
-    action: 'post_trade', type: selType_, coin: selCoin_,
-    amount: amt, rate, min, max,
-    payments: Array.from(selPMs),
-    accounts: pmAccounts
-  };
+  const amt=document.getElementById('tAmt').value, rate=document.getElementById('tRate').value;
+  const min=document.getElementById('tMin').value, max=document.getElementById('tMax').value;
+  if (!amt||!rate||!min||!max) { showToast('⚠️ Fill all fields','err'); return; }
+  if (!selPMs.size) { showToast('⚠️ Select payment method','err'); return; }
+  const data = {action:'post_trade',type:selType_,coin:selCoin_,amount:amt,rate,min,max,payments:Array.from(selPMs),accounts:pmAccounts};
   if (tg) tg.sendData(JSON.stringify(data));
-  showToast('✅ Trade posted!', 'ok');
-  setTimeout(() => go('browse'), 1500);
+  showToast('✅ Trade posted!','ok');
+  setTimeout(()=>go('browse'),1500);
 }
 
-// ── TRADE MODAL ───────────────────────────────────────────────────────────────
-function openModal(data) {
+// ── FIX 4: TRADE MODAL with payment info ─────────────────────────────────────
+function openTradeModal(data) {
   const t = JSON.parse(decodeURIComponent(data));
-  const isBuy = t.trade_type === 'sell';
-  document.getElementById('mTitle').textContent = isBuy ? `🛒 Buy ${t.coin}` : `💸 Sell ${t.coin}`;
+  const isBuy = t.trade_type==='sell'; // if listing is SELL, user is BUYing
+  const isMyTrade = TG_ID && String(t.poster_telegram_id||'') === String(TG_ID);
+  document.getElementById('mTitle').textContent = isMyTrade ? `📌 Your Trade — ${t.trade_ref}` : (isBuy?`🛒 Buy ${t.coin}`:`💸 Sell ${t.coin}`);
 
-  // Build payment accounts display
-  let pmText = t.payment_methods || '';
+  // FIX 4: Build payment accounts display
+  let accHTML = '';
   if (t.accounts) {
     try {
-      const acc = typeof t.accounts === 'string' ? JSON.parse(t.accounts) : t.accounts;
-      pmText = Object.entries(acc).map(([k,v]) => v ? `${k}: ${v}` : k).join(' | ');
+      const acc = typeof t.accounts==='string' ? JSON.parse(t.accounts) : t.accounts;
+      const rows = Object.entries(acc).filter(([k,v])=>v).map(([k,v])=>
+        `<div class="pay-info-row"><span class="pay-info-key">${k}</span><span class="pay-info-val" onclick="copyText('${v}')">${v} 📋</span></div>`
+      ).join('');
+      if (rows) accHTML = `<div class="pay-info-box"><div class="pay-info-title">💳 Payment Account Details</div>${rows}</div>`;
     } catch {}
   }
 
@@ -611,28 +686,71 @@ function openModal(data) {
       <div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="color:var(--muted2);font-size:12px">Amount</span><span style="font-weight:700">${t.amount} ${t.coin}</span></div>
       <div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="color:var(--muted2);font-size:12px">Rate</span><span style="font-weight:700;color:var(--accent2)">${Number(t.rate_etb).toLocaleString()} ETB</span></div>
       <div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="color:var(--muted2);font-size:12px">Total</span><span style="font-weight:700;color:var(--accent)">${Number(t.total_etb).toLocaleString()} ETB</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted2);font-size:12px">Payment</span><span style="font-weight:600;font-size:11px">${pmText}</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted2);font-size:12px">Trader</span><span style="font-weight:600;font-size:11px">${t.full_name||'Trader'} ⭐${Number(t.rating||0).toFixed(1)}</span></div>
     </div>
+    ${accHTML}
     <div style="padding:10px;background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.15);border-radius:9px;font-size:11px;color:var(--muted2)">
       🔒 Crypto locked in escrow until payment confirmed
     </div>`;
-  document.getElementById('mBtn').textContent = isBuy ? '✅ Confirm Purchase' : '✅ Confirm Sale';
-  document.getElementById('mBtn').onclick = () => {
-    if (tg) tg.sendData(JSON.stringify({action: 'start_trade', trade_ref: t.trade_ref}));
-    document.getElementById('tradeModal').classList.remove('open');
-    showToast('🔒 Escrow activated!', 'ok');
-    setTimeout(() => go('orders'), 1200);
-  };
+
+  // FIX 3: Confirm & Cancel buttons for buyer
+  if (isMyTrade) {
+    document.getElementById('mActions').innerHTML = `
+      <button onclick="document.getElementById('tradeModal').classList.remove('open')" style="width:100%;padding:13px;background:var(--card2);border:1px solid var(--border);border-radius:11px;color:var(--muted2);font-size:13px;font-family:'Space Grotesk',sans-serif;cursor:pointer;margin-top:12px">Close</button>`;
+  } else {
+    document.getElementById('mActions').innerHTML = `
+      <button class="sub-btn" style="margin-top:14px" onclick="confirmTrade('${JSON.stringify(t).replace(/'/g,"\\'")}')">
+        ${isBuy?'✅ Confirm — I want to Buy':'✅ Confirm — I want to Sell'}
+      </button>
+      <button onclick="document.getElementById('tradeModal').classList.remove('open')" style="width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:11px;color:var(--muted2);font-size:13px;font-family:'Space Grotesk',sans-serif;cursor:pointer">❌ Cancel</button>`;
+  }
   document.getElementById('tradeModal').classList.add('open');
 }
 
-// ── WALLET ────────────────────────────────────────────────────────────────────
-async function loadWallet() {
-  if (!TG_ID || !API_BASE) return;
+function confirmTrade(tData) {
+  try {
+    const t = typeof tData==='string' ? JSON.parse(tData) : tData;
+    if (tg) tg.sendData(JSON.stringify({action:'start_trade', trade_ref:t.trade_ref}));
+    document.getElementById('tradeModal').classList.remove('open');
+    showToast('🔒 Escrow activated! Check bot.','ok');
+    setTimeout(()=>go('orders'),1500);
+  } catch(e) { showToast('❌ Error','err'); }
+}
+
+// ── FIX 1: WALLET with real addresses ────────────────────────────────────────
+async function loadWalletSilent() {
+  if (!TG_ID) return;
   try {
     const res = await fetch(`${API_BASE}/api/wallet?tg_id=${TG_ID}`);
-    if (res.ok) { currentWallet = await res.json(); }
+    if (res.ok) currentWallet = await res.json();
   } catch {}
+}
+
+async function loadWallet() {
+  if (!TG_ID) { document.getElementById('walletAddresses').innerHTML='<div class="empty" style="padding:16px">Login via bot first.</div>'; return; }
+  if (!currentWallet) await loadWalletSilent();
+
+  const nets = [
+    {key:'tron_address',net:'TRON',icon:'🔴',coins:'TRX / USDT'},
+    {key:'bsc_address', net:'BSC', icon:'🟡',coins:'BNB / USDT'},
+    {key:'eth_address', net:'ETH', icon:'🔵',coins:'ETH / USDT'},
+    {key:'ton_address', net:'TON', icon:'💎',coins:'TON'},
+  ];
+
+  document.getElementById('walletAddresses').innerHTML = nets.map(n => {
+    const addr = currentWallet?.[n.key] || null;
+    const short = addr ? addr.slice(0,12)+'...'+addr.slice(-6) : 'Not generated';
+    return `<div class="net-row" onclick="showAddr('${n.net}','${n.key}','${n.icon}','${n.coins}')">
+      <div style="display:flex;align-items:center">
+        <span class="net-icon">${n.icon}</span>
+        <div>
+          <div class="net-name">${n.net}</div>
+          <div class="net-coins">${addr ? short : '⚠️ '+n.coins+' — tap to generate'}</div>
+        </div>
+      </div>
+      <span style="color:var(--muted2)">›</span>
+    </div>`;
+  }).join('');
 }
 
 async function showAddr(network, key, icon, coins) {
@@ -641,55 +759,61 @@ async function showAddr(network, key, icon, coins) {
   document.getElementById('dAddrIcon').textContent = icon;
   document.getElementById('dAddrCoins').textContent = coins;
   document.getElementById('dAddr').textContent = 'Loading...';
-
   const warns = {
-    TRON: '⚠️ Only send TRX or USDT (TRC20). Minimum: 1 USDT / 10 TRX. 20 confirmations.',
-    BSC:  '⚠️ Only send BNB or USDT (BEP20). Minimum: 0.01 BNB / 5 USDT. 15 confirmations.',
-    ETH:  '⚠️ Only send ETH or USDT (ERC20). Minimum: 0.005 ETH / 10 USDT. 12 confirmations.',
-    TON:  '⚠️ Only send TON. Minimum: 1 TON. 5 confirmations required.',
+    TRON:'⚠️ Only send TRX or USDT (TRC20). Min: 1 USDT. 20 confirmations.',
+    BSC: '⚠️ Only send BNB or USDT (BEP20). Min: 0.01 BNB. 15 confirmations.',
+    ETH: '⚠️ Only send ETH or USDT (ERC20). Min: 0.005 ETH. 12 confirmations.',
+    TON: '⚠️ Only send TON. Min: 1 TON. 5 confirmations.',
   };
-  document.getElementById('dWarn').textContent = warns[network] || '';
-
-  try {
-    if (!currentWallet) await loadWallet();
-    const addr = currentWallet?.[key];
-    document.getElementById('dAddr').textContent = addr || 'Register via /start in bot first';
-  } catch {
-    document.getElementById('dAddr').textContent = 'Error loading address. Try again.';
-  }
+  document.getElementById('dWarn').textContent = warns[network]||'';
+  if (!currentWallet && TG_ID) await loadWalletSilent();
+  const addr = currentWallet?.[key];
+  document.getElementById('dAddr').textContent = addr||'Register via /start in bot first';
 }
 
 function copyAddr() {
   const addr = document.getElementById('dAddr').textContent;
-  if (addr.includes('Register') || addr.includes('Error')) { showToast('⚠️ No address yet', 'err'); return; }
-  navigator.clipboard.writeText(addr).then(() => showToast('📋 Address copied!', 'ok')).catch(() => {
-    const el = document.createElement('textarea');
-    el.value = addr; document.body.appendChild(el); el.select();
-    document.execCommand('copy'); document.body.removeChild(el);
-    showToast('📋 Address copied!', 'ok');
-  });
+  if (!addr||addr.includes('Register')) { showToast('⚠️ No address','err'); return; }
+  copyText(addr);
 }
 
-async function loadWdBals() {
-  const el = document.getElementById('wdBals');
-  if (!TG_ID || !API_BASE) { el.innerHTML = '<div class="empty" style="padding:16px">Login via bot first.</div>'; return; }
-  if (!currentWallet) await loadWallet();
-  el.innerHTML = ['TRON','BSC','ETH','TON'].map(net => {
-    const icons = {TRON:'🔴',BSC:'🟡',ETH:'🔵',TON:'💎'};
-    const coins = {TRON:'TRX / USDT',BSC:'BNB / USDT',ETH:'ETH / USDT',TON:'TON'};
-    return `<div class="hist-item">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:20px">${icons[net]}</span>
-        <div><div style="font-weight:600;font-size:13px">${net}</div><div style="font-size:9px;color:var(--muted2)">${coins[net]}</div></div>
-      </div>
-      <div><div style="font-weight:700;color:var(--accent);font-size:13px">0.00</div><div style="font-size:9px;color:var(--muted2)">Available</div></div>
-    </div>`;
-  }).join('');
+// ── FIX 5: KYC ────────────────────────────────────────────────────────────────
+async function loadKYCStatus() {
+  if (!TG_ID) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/kyc?tg_id=${TG_ID}`);
+    if (!res.ok) return;
+    const kyc = await res.json();
+    const card = document.getElementById('kycCard');
+    const btn = document.getElementById('kycBtn');
+    const desc = document.getElementById('kycDesc');
+    if (kyc.status === 'approved') {
+      card.style.background = 'linear-gradient(135deg,rgba(0,229,160,0.1),rgba(0,229,160,0.05))';
+      card.style.borderColor = 'rgba(0,229,160,0.3)';
+      desc.innerHTML = '✅ <strong style="color:var(--accent)">Your identity is verified!</strong><br>You have a ✅ badge on your profile.';
+      btn.style.display = 'none';
+    } else if (kyc.status === 'pending') {
+      desc.innerHTML = '⏳ <strong style="color:var(--accent2)">KYC Under Review</strong><br>Usually approved within 24 hours.';
+      btn.textContent = '⏳ Pending Review';
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+    }
+  } catch {}
+}
+
+function startKYC() {
+  if (tg) {
+    tg.sendData(JSON.stringify({action:'start_kyc'}));
+    document.getElementById('tradeModal').classList.remove('open');
+    showToast('📱 Opening KYC in bot...','ok');
+  } else {
+    window.location.href = 'https://t.me/p2pethiopian_bot?start=kyc';
+  }
 }
 
 function sendToBot(action) {
-  if (tg) tg.sendData(JSON.stringify({action}));
-  else showToast('⚠️ Open in Telegram', 'err');
+  if (tg) { tg.close(); setTimeout(()=>{ window.location.href=`https://t.me/p2pethiopian_bot?start=${action}`; },300); }
+  else { window.location.href=`https://t.me/p2pethiopian_bot?start=${action}`; }
 }
 
 // ── RATES ─────────────────────────────────────────────────────────────────────
@@ -697,38 +821,26 @@ async function fetchRates() {
   try {
     const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether,bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true');
     const data = await res.json();
-    const map = {tether:'usdt',bitcoin:'btc',ethereum:'eth',binancecoin:'bnb'};
-    const cmap = {tether:'USDT',bitcoin:'BTC',ethereum:'ETH',binancecoin:'BNB'};
-    for (const [id, sym] of Object.entries(map)) {
+    const map={tether:'usdt',bitcoin:'btc',ethereum:'eth',binancecoin:'bnb'};
+    const cmap={tether:'USDT',bitcoin:'BTC',ethereum:'ETH',binancecoin:'BNB'};
+    for (const [id,sym] of Object.entries(map)) {
       if (!data[id]) continue;
-      const etb = data[id].usd * USD_ETB;
-      const ch = data[id].usd_24h_change || 0;
-      liveRates[cmap[id]] = etb;
-      const re = document.getElementById('r-'+sym), ce = document.getElementById('c-'+sym);
-      if (re) re.textContent = etb >= 1000 ? etb.toLocaleString('en',{maximumFractionDigits:0})+' ETB' : etb.toFixed(2)+' ETB';
-      if (ce) { ce.textContent = (ch>=0?'▲ +':'▼ ')+ch.toFixed(2)+'%'; ce.className = 'rate-chg '+(ch>=0?'up':'dn'); }
+      const etb=data[id].usd*USD_ETB, ch=data[id].usd_24h_change||0;
+      liveRates[cmap[id]]=etb;
+      const re=document.getElementById('r-'+sym), ce=document.getElementById('c-'+sym);
+      if (re) re.textContent=etb>=1000?etb.toLocaleString('en',{maximumFractionDigits:0})+' ETB':etb.toFixed(2)+' ETB';
+      if (ce){ce.textContent=(ch>=0?'▲ +':'▼ ')+ch.toFixed(2)+'%';ce.className='rate-chg '+(ch>=0?'up':'dn');}
     }
-    const r = liveRates[selCoin_];
-    if (r) document.getElementById('mRate').textContent = r.toLocaleString('en',{maximumFractionDigits:0})+' ETB';
+    const r=liveRates[selCoin_];
+    if (r) document.getElementById('mRate').textContent=r.toLocaleString('en',{maximumFractionDigits:0})+' ETB';
   } catch {}
 }
 
-// ── TOAST ─────────────────────────────────────────────────────────────────────
-function showToast(msg, type='ok') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = `toast ${type} show`;
-  setTimeout(() => t.className = `toast ${type}`, 2500);
-}
+function showToast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.className=`toast ${type}`,2500);}
+function fmtVol(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return n.toFixed(0);}
 
-function fmtVol(n) {
-  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
-  if (n >= 1e3) return (n/1e3).toFixed(0)+'K';
-  return n.toFixed(0);
-}
-
-// ── START ─────────────────────────────────────────────────────────────────────
 init();
-setInterval(fetchRates, 300000);
+setInterval(fetchRates,300000);
 </script>
 </body>
 </html>
