@@ -812,8 +812,11 @@ function startKYC() {
 }
 
 function sendToBot(action) {
-  if (tg) { tg.close(); setTimeout(()=>{ window.location.href=`https://t.me/p2pethiopian_bot?start=${action}`; },300); }
-  else { window.location.href=`https://t.me/p2pethiopian_bot?start=${action}`; }
+  if (tg) {
+    tg.sendData(JSON.stringify({action: action}));
+  } else {
+    window.location.href = `https://t.me/p2pethiopian_bot?start=${action}`;
+  }
 }
 
 // ── RATES ─────────────────────────────────────────────────────────────────────
