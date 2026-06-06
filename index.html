@@ -583,10 +583,12 @@ function orderCardHTML(o) {
 }
 
 function buildAccounts(accounts) {
+  if (!accounts) return '';
   try {
     const acc = typeof accounts === 'string' ? JSON.parse(accounts) : accounts;
-    return Object.entries(acc).filter(([k,v])=>v).map(([k,v])=>
-      `<div class="pay-info-row"><span class="pay-info-key">${k}</span><span class="pay-info-val" onclick="copyText('${v}')">${v} 📋</span></div>`
+    if (!acc || Object.keys(acc).length === 0) return '';
+    return Object.entries(acc).filter(([k,v])=>v&&v.toString().trim()).map(([k,v])=>
+      `<div class="pay-info-row"><span class="pay-info-key">${k}</span><span class="pay-info-val" onclick="copyText('${v}')" style="cursor:pointer">${v} 📋</span></div>`
     ).join('');
   } catch { return ''; }
 }
@@ -602,19 +604,25 @@ function copyText(text) {
 
 // FIX 3: Order action buttons send to bot
 function orderAction(action, orderRef) {
-  const actions = {
-    'paid': `✅ Mark payment sent for order #${orderRef}?`,
-    'received': `✅ Confirm you received payment for order #${orderRef}?`,
-    'notreceived': `❌ Report payment NOT received for order #${orderRef}?`,
-    'dispute': `⚠️ Open dispute for order #${orderRef}?`,
+  const msgs = {
+    'paid': 'Mark payment as sent?',
+    'received': 'Confirm you received payment?',
+    'notreceived': 'Report payment NOT received?',
+    'dispute': 'Open a dispute for this order?',
   };
-  if (!confirm(actions[action]||'Confirm?')) return;
-  if (tg) {
-    tg.sendData(JSON.stringify({action: `order_${action}`, order_ref: orderRef}));
-    showToast('✅ Sent to bot for processing','ok');
-    setTimeout(loadOrders, 2000);
+  if (!confirm(msgs[action]||'Confirm?')) return;
+  if (tg && tg.sendData) {
+    try {
+      tg.sendData(JSON.stringify({action: 'order_' + action, order_ref: orderRef}));
+      showToast('✅ Processing...','ok');
+      setTimeout(() => loadOrders(), 3000);
+    } catch(e) {
+      showToast('❌ Error: ' + e.message, 'err');
+    }
   } else {
-    showToast('⚠️ Open in Telegram app','err');
+    // Fallback: open bot with the action
+    window.open('https://t.me/p2pethiopian_bot?start=order_' + action + '_' + orderRef);
+    showToast('⚠️ Complete in Telegram bot','err');
   }
 }
 
@@ -657,9 +665,17 @@ function postTrade() {
   if (!amt||!rate||!min||!max) { showToast('⚠️ Fill all fields','err'); return; }
   if (!selPMs.size) { showToast('⚠️ Select payment method','err'); return; }
   const data = {action:'post_trade',type:selType_,coin:selCoin_,amount:amt,rate,min,max,payments:Array.from(selPMs),accounts:pmAccounts};
-  if (tg) tg.sendData(JSON.stringify(data));
-  showToast('✅ Trade posted!','ok');
-  setTimeout(()=>go('browse'),1500);
+  if (tg && tg.sendData) {
+    tg.sendData(JSON.stringify(data));
+    showToast('✅ Trade posted! Loading...','ok');
+    activeFilter = {};
+    setTimeout(()=>{
+      go('browse');
+      loadTrades();
+    }, 2000);
+  } else {
+    showToast('⚠️ Open in Telegram','err');
+  }
 }
 
 // ── FIX 4: TRADE MODAL with payment info ─────────────────────────────────────
@@ -669,17 +685,9 @@ function openTradeModal(data) {
   const isMyTrade = TG_ID && String(t.poster_telegram_id||'') === String(TG_ID);
   document.getElementById('mTitle').textContent = isMyTrade ? `📌 Your Trade — ${t.trade_ref}` : (isBuy?`🛒 Buy ${t.coin}`:`💸 Sell ${t.coin}`);
 
-  // FIX 4: Build payment accounts display
+  // FIX 1: Payment accounts shown ONLY after buyer confirms (in orders page)
+  // In browse modal, just show payment methods, not account numbers
   let accHTML = '';
-  if (t.accounts) {
-    try {
-      const acc = typeof t.accounts==='string' ? JSON.parse(t.accounts) : t.accounts;
-      const rows = Object.entries(acc).filter(([k,v])=>v).map(([k,v])=>
-        `<div class="pay-info-row"><span class="pay-info-key">${k}</span><span class="pay-info-val" onclick="copyText('${v}')">${v} 📋</span></div>`
-      ).join('');
-      if (rows) accHTML = `<div class="pay-info-box"><div class="pay-info-title">💳 Payment Account Details</div>${rows}</div>`;
-    } catch {}
-  }
 
   document.getElementById('mBody').innerHTML = `
     <div style="background:var(--card2);border-radius:11px;padding:14px;margin-bottom:10px">
@@ -802,21 +810,21 @@ async function loadKYCStatus() {
 }
 
 function startKYC() {
-  if (tg) {
-    tg.sendData(JSON.stringify({action:'start_kyc'}));
-    document.getElementById('tradeModal').classList.remove('open');
-    showToast('📱 Opening KYC in bot...','ok');
-  } else {
+  showToast('📱 Opening KYC in bot...','ok');
+  setTimeout(() => {
+    if (tg) {
+      tg.close();
+    }
     window.location.href = 'https://t.me/p2pethiopian_bot?start=kyc';
-  }
+  }, 800);
 }
 
 function sendToBot(action) {
-  if (tg) {
-    tg.sendData(JSON.stringify({action: action}));
-  } else {
+  showToast('📱 Opening bot...','ok');
+  setTimeout(() => {
+    if (tg) tg.close();
     window.location.href = `https://t.me/p2pethiopian_bot?start=${action}`;
-  }
+  }, 600);
 }
 
 // ── RATES ─────────────────────────────────────────────────────────────────────
