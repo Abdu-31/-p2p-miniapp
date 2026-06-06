@@ -603,7 +603,7 @@ function copyText(text) {
 }
 
 // FIX 3: Order action buttons send to bot
-function orderAction(action, orderRef) {
+async function orderAction(action, orderRef) {
   const msgs = {
     'paid': 'Mark payment as sent?',
     'received': 'Confirm you received payment?',
@@ -611,18 +611,35 @@ function orderAction(action, orderRef) {
     'dispute': 'Open a dispute for this order?',
   };
   if (!confirm(msgs[action]||'Confirm?')) return;
-  if (tg && tg.sendData) {
-    try {
-      tg.sendData(JSON.stringify({action: 'order_' + action, order_ref: orderRef}));
-      showToast('✅ Processing...','ok');
-      setTimeout(() => loadOrders(), 3000);
-    } catch(e) {
-      showToast('❌ Error: ' + e.message, 'err');
+
+  // Call API directly - no need to close miniapp
+  showToast('⏳ Processing...','ok');
+  try {
+    const res = await fetch(`${API_BASE}/api/order_action`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        action: 'order_' + action,
+        order_ref: orderRef,
+        tg_id: TG_ID
+      })
+    });
+    const result = await res.json();
+    if (result.ok) {
+      showToast('✅ ' + (result.message || 'Done!'), 'ok');
+      setTimeout(() => loadOrders(), 1500);
+    } else {
+      showToast('❌ ' + (result.error || 'Error'), 'err');
     }
-  } else {
-    // Fallback: open bot with the action
-    window.open('https://t.me/p2pethiopian_bot?start=order_' + action + '_' + orderRef);
-    showToast('⚠️ Complete in Telegram bot','err');
+  } catch(e) {
+    // Fallback to sendData
+    if (tg && tg.sendData) {
+      tg.sendData(JSON.stringify({action: 'order_' + action, order_ref: orderRef}));
+      showToast('✅ Sent to bot','ok');
+      setTimeout(() => loadOrders(), 3000);
+    } else {
+      showToast('❌ Could not connect','err');
+    }
   }
 }
 
@@ -811,20 +828,21 @@ async function loadKYCStatus() {
 
 function startKYC() {
   showToast('📱 Opening KYC in bot...','ok');
-  setTimeout(() => {
-    if (tg) {
-      tg.close();
-    }
+  if (tg) {
+    tg.openTelegramLink('https://t.me/p2pethiopian_bot?start=kyc');
+  } else {
     window.location.href = 'https://t.me/p2pethiopian_bot?start=kyc';
-  }, 800);
+  }
 }
 
 function sendToBot(action) {
   showToast('📱 Opening bot...','ok');
-  setTimeout(() => {
-    if (tg) tg.close();
+  if (tg) {
+    // Use switchInlineQuery to open bot with specific command
+    tg.openTelegramLink(`https://t.me/p2pethiopian_bot?start=${action}`);
+  } else {
     window.location.href = `https://t.me/p2pethiopian_bot?start=${action}`;
-  }, 600);
+  }
 }
 
 // ── RATES ─────────────────────────────────────────────────────────────────────
