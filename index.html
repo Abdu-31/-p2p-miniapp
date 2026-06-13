@@ -682,14 +682,16 @@ function postTrade() {
   if (!amt||!rate||!min||!max) { showToast('⚠️ Fill all fields','err'); return; }
   if (!selPMs.size) { showToast('⚠️ Select payment method','err'); return; }
   const data = {action:'post_trade',type:selType_,coin:selCoin_,amount:amt,rate,min,max,payments:Array.from(selPMs),accounts:pmAccounts};
+  if (!TG_ID) { showToast('⚠️ Open in Telegram bot first','err'); return; }
   if (tg && tg.sendData) {
     tg.sendData(JSON.stringify(data));
-    showToast('✅ Trade posted! Loading...','ok');
+    showToast('✅ Trade posted! Refreshing...','ok');
     activeFilter = {};
-    setTimeout(()=>{
+    // Force fresh reload after bot processes the trade
+    setTimeout(async ()=>{
       go('browse');
-      loadTrades();
-    }, 2000);
+      await loadTrades();
+    }, 3000);
   } else {
     showToast('⚠️ Open in Telegram','err');
   }
@@ -718,13 +720,21 @@ function openTradeModal(data) {
       🔒 Crypto locked in escrow until payment confirmed
     </div>`;
 
-  // FIX 3: Confirm & Cancel buttons for buyer
+    // Amount input inline - no prompt() which is blocked in Telegram WebApp
+  const minCoin = (t.min_etb / t.rate_etb).toFixed(4);
+  const maxCoin = Math.min(Number(t.amount), t.max_etb / t.rate_etb).toFixed(4);
   if (isMyTrade) {
     document.getElementById('mActions').innerHTML = `
       <button onclick="document.getElementById('tradeModal').classList.remove('open')" style="width:100%;padding:13px;background:var(--card2);border:1px solid var(--border);border-radius:11px;color:var(--muted2);font-size:13px;font-family:'Space Grotesk',sans-serif;cursor:pointer;margin-top:12px">Close</button>`;
   } else {
+    window._currentTrade = t;
     document.getElementById('mActions').innerHTML = `
-      <button class="sub-btn" style="margin-top:14px" onclick="confirmTrade('${JSON.stringify(t).replace(/'/g,"\\'")}')">
+      <div style="margin-top:14px;margin-bottom:10px">
+        <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted2);text-transform:uppercase;display:block;margin-bottom:7px">Amount (${t.coin}) — min: ${minCoin}, max: ${maxCoin}</label>
+        <input type="number" id="tradeAmtInput" class="inp" placeholder="${maxCoin}" value="${maxCoin}" inputmode="decimal" oninput="updateTradeTotal()"/>
+        <div id="tradeTotalPreview" style="font-size:12px;color:var(--accent);margin-top:6px;font-weight:600">Total: ${(Number(maxCoin)*t.rate_etb).toLocaleString()} ETB</div>
+      </div>
+      <button class="sub-btn" id="confirmTradeBtn" onclick="confirmTradeWithAmt()">
         ${isBuy?'✅ Confirm — I want to Buy':'✅ Confirm — I want to Sell'}
       </button>
       <button onclick="document.getElementById('tradeModal').classList.remove('open')" style="width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:11px;color:var(--muted2);font-size:13px;font-family:'Space Grotesk',sans-serif;cursor:pointer">❌ Cancel</button>`;
@@ -732,144 +742,40 @@ function openTradeModal(data) {
   document.getElementById('tradeModal').classList.add('open');
 }
 
+function updateTradeTotal() {
+  const t = window._currentTrade;
+  if (!t) return;
+  const inp = document.getElementById('tradeAmtInput');
+  const prev = document.getElementById('tradeTotalPreview');
+  const btn = document.getElementById('confirmTradeBtn');
+  if (!inp || !prev) return;
+  const amt = parseFloat(inp.value) || 0;
+  const total = amt * t.rate_etb;
+  if (amt <= 0) { prev.textContent = 'Enter amount'; prev.style.color='var(--muted)'; if(btn)btn.disabled=true; }
+  else if (total < t.min_etb) { prev.textContent = `⚠️ Min: ${Number(t.min_etb).toLocaleString()} ETB`; prev.style.color='var(--red)'; if(btn)btn.disabled=true; }
+  else if (total > t.max_etb) { prev.textContent = `⚠️ Max: ${Number(t.max_etb).toLocaleString()} ETB`; prev.style.color='var(--red)'; if(btn)btn.disabled=true; }
+  else { prev.textContent = `Total: ${total.toLocaleString()} ETB ✅`; prev.style.color='var(--accent)'; if(btn)btn.disabled=false; }
+}
+
+function confirmTradeWithAmt() {
+  const t = window._currentTrade;
+  if (!t) return;
+  const inp = document.getElementById('tradeAmtInput');
+  const amount = parseFloat(inp ? inp.value : t.amount);
+  if (!amount || isNaN(amount) || amount <= 0) { showToast('⚠️ Enter amount','err'); return; }
+  const totalETB = amount * t.rate_etb;
+  if (totalETB < t.min_etb) { showToast(`❌ Min ${Number(t.min_etb).toLocaleString()} ETB`,'err'); return; }
+  if (totalETB > t.max_etb) { showToast(`❌ Max ${Number(t.max_etb).toLocaleString()} ETB`,'err'); return; }
+  if (amount > Number(t.amount)) { showToast(`❌ Only ${t.amount} ${t.coin} available`,'err'); return; }
+  document.getElementById('tradeModal').classList.remove('open');
+  showToast('🔒 Starting trade...','ok');
+  if (tg && tg.sendData) {
+    tg.sendData(JSON.stringify({action:'start_trade', trade_ref: t.trade_ref, amount: amount}));
+  }
+  setTimeout(()=>go('orders'), 2000);
+}
+
 function confirmTrade(tData) {
-  try {
-    const t = typeof tData==='string' ? JSON.parse(tData) : tData;
-    if (tg) tg.sendData(JSON.stringify({action:'start_trade', trade_ref:t.trade_ref}));
-    document.getElementById('tradeModal').classList.remove('open');
-    showToast('🔒 Escrow activated! Check bot.','ok');
-    setTimeout(()=>go('orders'),1500);
-  } catch(e) { showToast('❌ Error','err'); }
+  window._currentTrade = typeof tData==='string' ? JSON.parse(tData) : tData;
+  confirmTradeWithAmt();
 }
-
-// ── FIX 1: WALLET with real addresses ────────────────────────────────────────
-async function loadWalletSilent() {
-  if (!TG_ID) return;
-  try {
-    const res = await fetch(`${API_BASE}/api/wallet?tg_id=${TG_ID}`);
-    if (res.ok) currentWallet = await res.json();
-  } catch {}
-}
-
-async function loadWallet() {
-  if (!TG_ID) { document.getElementById('walletAddresses').innerHTML='<div class="empty" style="padding:16px">Login via bot first.</div>'; return; }
-  if (!currentWallet) await loadWalletSilent();
-
-  const nets = [
-    {key:'tron_address',net:'TRON',icon:'🔴',coins:'TRX / USDT'},
-    {key:'bsc_address', net:'BSC', icon:'🟡',coins:'BNB / USDT'},
-    {key:'eth_address', net:'ETH', icon:'🔵',coins:'ETH / USDT'},
-    {key:'ton_address', net:'TON', icon:'💎',coins:'TON'},
-  ];
-
-  document.getElementById('walletAddresses').innerHTML = nets.map(n => {
-    const addr = currentWallet?.[n.key] || null;
-    const short = addr ? addr.slice(0,12)+'...'+addr.slice(-6) : 'Not generated';
-    return `<div class="net-row" onclick="showAddr('${n.net}','${n.key}','${n.icon}','${n.coins}')">
-      <div style="display:flex;align-items:center">
-        <span class="net-icon">${n.icon}</span>
-        <div>
-          <div class="net-name">${n.net}</div>
-          <div class="net-coins">${addr ? short : '⚠️ '+n.coins+' — tap to generate'}</div>
-        </div>
-      </div>
-      <span style="color:var(--muted2)">›</span>
-    </div>`;
-  }).join('');
-}
-
-async function showAddr(network, key, icon, coins) {
-  goTo('dep-addr');
-  document.getElementById('dAddrTitle').textContent = `Deposit — ${network}`;
-  document.getElementById('dAddrIcon').textContent = icon;
-  document.getElementById('dAddrCoins').textContent = coins;
-  document.getElementById('dAddr').textContent = 'Loading...';
-  const warns = {
-    TRON:'⚠️ Only send TRX or USDT (TRC20). Min: 1 USDT. 20 confirmations.',
-    BSC: '⚠️ Only send BNB or USDT (BEP20). Min: 0.01 BNB. 15 confirmations.',
-    ETH: '⚠️ Only send ETH or USDT (ERC20). Min: 0.005 ETH. 12 confirmations.',
-    TON: '⚠️ Only send TON. Min: 1 TON. 5 confirmations.',
-  };
-  document.getElementById('dWarn').textContent = warns[network]||'';
-  if (!currentWallet && TG_ID) await loadWalletSilent();
-  const addr = currentWallet?.[key];
-  document.getElementById('dAddr').textContent = addr||'Register via /start in bot first';
-}
-
-function copyAddr() {
-  const addr = document.getElementById('dAddr').textContent;
-  if (!addr||addr.includes('Register')) { showToast('⚠️ No address','err'); return; }
-  copyText(addr);
-}
-
-// ── FIX 5: KYC ────────────────────────────────────────────────────────────────
-async function loadKYCStatus() {
-  if (!TG_ID) return;
-  try {
-    const res = await fetch(`${API_BASE}/api/kyc?tg_id=${TG_ID}`);
-    if (!res.ok) return;
-    const kyc = await res.json();
-    const card = document.getElementById('kycCard');
-    const btn = document.getElementById('kycBtn');
-    const desc = document.getElementById('kycDesc');
-    if (kyc.status === 'approved') {
-      card.style.background = 'linear-gradient(135deg,rgba(0,229,160,0.1),rgba(0,229,160,0.05))';
-      card.style.borderColor = 'rgba(0,229,160,0.3)';
-      desc.innerHTML = '✅ <strong style="color:var(--accent)">Your identity is verified!</strong><br>You have a ✅ badge on your profile.';
-      btn.style.display = 'none';
-    } else if (kyc.status === 'pending') {
-      desc.innerHTML = '⏳ <strong style="color:var(--accent2)">KYC Under Review</strong><br>Usually approved within 24 hours.';
-      btn.textContent = '⏳ Pending Review';
-      btn.disabled = true;
-      btn.style.opacity = '0.6';
-    }
-  } catch {}
-}
-
-function startKYC() {
-  showToast('📱 Opening KYC in bot...','ok');
-  if (tg) {
-    tg.openTelegramLink('https://t.me/p2pethiopian_bot?start=kyc');
-  } else {
-    window.location.href = 'https://t.me/p2pethiopian_bot?start=kyc';
-  }
-}
-
-function sendToBot(action) {
-  showToast('📱 Opening bot...','ok');
-  if (tg) {
-    // Use switchInlineQuery to open bot with specific command
-    tg.openTelegramLink(`https://t.me/p2pethiopian_bot?start=${action}`);
-  } else {
-    window.location.href = `https://t.me/p2pethiopian_bot?start=${action}`;
-  }
-}
-
-// ── RATES ─────────────────────────────────────────────────────────────────────
-async function fetchRates() {
-  try {
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether,bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true');
-    const data = await res.json();
-    const map={tether:'usdt',bitcoin:'btc',ethereum:'eth',binancecoin:'bnb'};
-    const cmap={tether:'USDT',bitcoin:'BTC',ethereum:'ETH',binancecoin:'BNB'};
-    for (const [id,sym] of Object.entries(map)) {
-      if (!data[id]) continue;
-      const etb=data[id].usd*USD_ETB, ch=data[id].usd_24h_change||0;
-      liveRates[cmap[id]]=etb;
-      const re=document.getElementById('r-'+sym), ce=document.getElementById('c-'+sym);
-      if (re) re.textContent=etb>=1000?etb.toLocaleString('en',{maximumFractionDigits:0})+' ETB':etb.toFixed(2)+' ETB';
-      if (ce){ce.textContent=(ch>=0?'▲ +':'▼ ')+ch.toFixed(2)+'%';ce.className='rate-chg '+(ch>=0?'up':'dn');}
-    }
-    const r=liveRates[selCoin_];
-    if (r) document.getElementById('mRate').textContent=r.toLocaleString('en',{maximumFractionDigits:0})+' ETB';
-  } catch {}
-}
-
-function showToast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.className=`toast ${type}`,2500);}
-function fmtVol(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return n.toFixed(0);}
-
-init();
-setInterval(fetchRates,300000);
-</script>
-</body>
-</html>
