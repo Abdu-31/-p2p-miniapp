@@ -175,21 +175,21 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <div class="pg active" id="pg-home">
   <div class="welcome">
     <div class="welcome-name" id="wName">Welcome 👋</div>
-    <div class="welcome-id" id="wId">Trader ID: ...</div>
-    <div class="tier-badge" id="wTier">Loading...</div>
+    <div class="welcome-id" id="wId">Connecting...</div>
+    <div class="tier-badge" id="wTier">🆕 New</div>
   </div>
   <div class="stats-grid">
-    <div class="stat"><div class="stat-lbl">Completed</div><div class="stat-val green" id="sCom">-</div><div class="stat-sub">trades</div></div>
-    <div class="stat"><div class="stat-lbl">Rating</div><div class="stat-val yellow" id="sRat">-</div><div class="stat-sub">out of 5.0</div></div>
-    <div class="stat"><div class="stat-lbl">Volume</div><div class="stat-val blue" id="sVol">-</div><div class="stat-sub">ETB traded</div></div>
+    <div class="stat"><div class="stat-lbl">Completed</div><div class="stat-val green" id="sCom">0</div><div class="stat-sub">trades</div></div>
+    <div class="stat"><div class="stat-lbl">Rating</div><div class="stat-val yellow" id="sRat">0.0</div><div class="stat-sub">out of 5.0</div></div>
+    <div class="stat"><div class="stat-lbl">Volume</div><div class="stat-val blue" id="sVol">0</div><div class="stat-sub">ETB traded</div></div>
     <div class="stat"><div class="stat-lbl">Disputes</div><div class="stat-val red">0</div><div class="stat-sub">clean record</div></div>
   </div>
   <div class="sec-label">Live Rates</div>
   <div class="rate-card">
-    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(38,161,123,0.15)">💵</div><div><div class="coin-name">Tether</div><div class="coin-sym">USDT</div></div></div><div><div class="rate-etb" id="r-usdt">...</div><div class="rate-chg up" id="c-usdt">—</div></div></div>
-    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(247,147,26,0.15)">₿</div><div><div class="coin-name">Bitcoin</div><div class="coin-sym">BTC</div></div></div><div><div class="rate-etb" id="r-btc">...</div><div class="rate-chg up" id="c-btc">—</div></div></div>
-    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(98,126,234,0.15)">⟠</div><div><div class="coin-name">Ethereum</div><div class="coin-sym">ETH</div></div></div><div><div class="rate-etb" id="r-eth">...</div><div class="rate-chg up" id="c-eth">—</div></div></div>
-    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(243,186,47,0.15)">🔶</div><div><div class="coin-name">BNB</div><div class="coin-sym">BNB</div></div></div><div><div class="rate-etb" id="r-bnb">...</div><div class="rate-chg up" id="c-bnb">—</div></div></div>
+    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(38,161,123,0.15)">💵</div><div><div class="coin-name">Tether</div><div class="coin-sym">USDT</div></div></div><div><div class="rate-etb" id="r-usdt">~135 ETB</div><div class="rate-chg up" id="c-usdt">loading...</div></div></div>
+    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(247,147,26,0.15)">₿</div><div><div class="coin-name">Bitcoin</div><div class="coin-sym">BTC</div></div></div><div><div class="rate-etb" id="r-btc">loading...</div><div class="rate-chg up" id="c-btc">⏳</div></div></div>
+    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(98,126,234,0.15)">⟠</div><div><div class="coin-name">Ethereum</div><div class="coin-sym">ETH</div></div></div><div><div class="rate-etb" id="r-eth">loading...</div><div class="rate-chg up" id="c-eth">⏳</div></div></div>
+    <div class="rate-row"><div class="rate-coin"><div class="coin-icon" style="background:rgba(243,186,47,0.15)">🔶</div><div><div class="coin-name">BNB</div><div class="coin-sym">BNB</div></div></div><div><div class="rate-etb" id="r-bnb">loading...</div><div class="rate-chg up" id="c-bnb">⏳</div></div></div>
   </div>
 </div>
 
@@ -379,13 +379,21 @@ const pmAccounts = {};
 let orderFilter = 'all';
 let allOrders = [];
 
+// Initialize Telegram WebApp
 if (tg) {
-  tg.ready(); tg.expand();
-  tg.setHeaderColor('#080c14');
-  tg.setBackgroundColor('#080c14');
-  TG_ID = tg.initDataUnsafe?.user?.id || null;
+  tg.ready();
+  tg.expand();
+  try { tg.setHeaderColor('#080c14'); } catch(e) {}
+  try { tg.setBackgroundColor('#080c14'); } catch(e) {}
+  // Try multiple ways to get user ID
+  TG_ID = tg.initDataUnsafe?.user?.id
+       || tg.initData?.match(/user=%7B%22id%22%3A(\d+)/)?.[1]
+       || null;
   TG_USER = tg.initDataUnsafe?.user || {};
+  if (TG_ID) TG_ID = String(TG_ID);
 }
+
+console.log('Mini App init - TG_ID:', TG_ID, 'has tg:', !!tg);
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
 function go(name) {
@@ -407,39 +415,77 @@ function goTo(name) {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function init() {
-  fetchRates();
-  if (TG_ID) {
-    await loadUser();
-    await loadWalletSilent();
-  } else {
-    // Not in Telegram - show guest UI immediately, don't hang
+  // Step 1: Show Telegram user data immediately (no loading state)
+  if (TG_USER.first_name) {
     setUserUI({
-      full_name: TG_USER.first_name || 'Guest',
-      telegram_id: 0, tier: 'new', tier_label: '🆕 New',
+      full_name: (TG_USER.first_name||'') + ' ' + (TG_USER.last_name||''),
+      telegram_id: TG_ID || 0,
+      tier: 'new', tier_label: '🆕 New',
       completed_trades: 0, cancelled_trades: 0,
       rating: 0, volume_etb: 0,
       created_at: new Date().toISOString()
     });
-    // Show warning banner
+  }
+
+  // Step 2: Load rates (non-blocking)
+  fetchRates();
+
+  // Step 3: Load full user data from API in background
+  if (TG_ID) {
+    loadUser();          // async, no await - don't block UI
+    loadWalletSilent();  // async, no await
+  } else {
+    setGuestUI();
     const warn = document.createElement('div');
-    warn.style.cssText = 'background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px;margin:12px 16px;font-size:12px;color:#ef4444;text-align:center;';
-    warn.innerHTML = '⚠️ Open this app inside <strong>Telegram</strong> to use all features.<br>Tap the button in @p2pethiopian_bot';
-    document.querySelector('.hdr').after(warn);
+    warn.style.cssText = 'background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:10px;margin:10px 16px;font-size:11px;color:#ef4444;text-align:center;';
+    warn.innerHTML = '⚠️ Open inside <strong>Telegram</strong> for full features';
+    const hdr = document.querySelector('.hdr');
+    if (hdr) hdr.after(warn);
   }
 }
 
 // ── USER ──────────────────────────────────────────────────────────────────────
 async function loadUser() {
+  // Show Telegram name IMMEDIATELY while API loads
+  const tgName = TG_USER.first_name || 'Trader';
+  setUserUI({
+    full_name: tgName,
+    telegram_id: TG_ID || 0,
+    tier: 'new', tier_label: '🆕 New',
+    completed_trades: 0, cancelled_trades: 0,
+    rating: 0, volume_etb: 0,
+    created_at: new Date().toISOString()
+  });
+
   if (!TG_ID) return;
+
+  // Then fetch real data from API
   try {
-    const res = await fetch(`${API_BASE}/api/user?tg_id=${TG_ID}`);
-    if (res.ok) { currentUser = await res.json(); setUserUI(currentUser); }
-    else setGuestUI();
-  } catch { setGuestUI(); }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(`${API_BASE}/api/user?tg_id=${TG_ID}`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    if (res.ok) {
+      currentUser = await res.json();
+      setUserUI(currentUser);
+    }
+  } catch(e) {
+    console.log('API load failed, showing Telegram data:', e.message);
+    // Keep showing Telegram name - don't show error to user
+  }
 }
 
 function setGuestUI() {
-  setUserUI({full_name:TG_USER.first_name||'Guest',telegram_id:TG_ID,tier:'new',tier_label:'🆕 New',completed_trades:0,cancelled_trades:0,rating:0,volume_etb:0,created_at:new Date().toISOString()});
+  setUserUI({
+    full_name: TG_USER.first_name || 'Guest',
+    telegram_id: TG_ID || 0,
+    tier: 'new', tier_label: '🆕 New',
+    completed_trades: 0, cancelled_trades: 0,
+    rating: 0, volume_etb: 0,
+    created_at: new Date().toISOString()
+  });
 }
 
 function setUserUI(u) {
@@ -450,7 +496,7 @@ function setUserUI(u) {
   const stars = '⭐'.repeat(Math.min(5,Math.round(u.rating||0)))||'☆☆☆☆☆';
   const since = (u.created_at||'').slice(0,7);
   document.getElementById('wName').textContent = `Welcome, ${first} 👋`;
-  document.getElementById('wId').textContent = `Trader ID: #ET${tid}`;
+  document.getElementById('wId').textContent = TG_ID ? `Trader ID: #ET${tid}` : 'Open in Telegram';
   document.getElementById('wTier').textContent = u.tier_label||'🆕 New';
   document.getElementById('sCom').textContent = u.completed_trades||0;
   document.getElementById('sRat').textContent = rating;
@@ -666,8 +712,7 @@ function selCoin(c) {
   document.querySelectorAll('.coin-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('cn-'+c).classList.add('active');
   document.getElementById('cHint').textContent = c;
-  const r = liveRates[c];
-  document.getElementById('mRate').textContent = r ? r.toLocaleString('en',{maximumFractionDigits:0})+' ETB' : 'loading...';
+  updateMktRate();
 }
 function togPM(pm) {
   const btn = document.getElementById('pm-'+pm);
