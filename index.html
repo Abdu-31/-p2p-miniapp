@@ -410,9 +410,21 @@ async function init() {
   fetchRates();
   if (TG_ID) {
     await loadUser();
-    await loadWalletSilent(); // FIX 1: preload wallet on start
+    await loadWalletSilent();
   } else {
-    setUserUI({full_name:'Guest',telegram_id:0,tier:'new',tier_label:'🆕 New',completed_trades:0,cancelled_trades:0,rating:0,volume_etb:0,created_at:new Date().toISOString()});
+    // Not in Telegram - show guest UI immediately, don't hang
+    setUserUI({
+      full_name: TG_USER.first_name || 'Guest',
+      telegram_id: 0, tier: 'new', tier_label: '🆕 New',
+      completed_trades: 0, cancelled_trades: 0,
+      rating: 0, volume_etb: 0,
+      created_at: new Date().toISOString()
+    });
+    // Show warning banner
+    const warn = document.createElement('div');
+    warn.style.cssText = 'background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px;margin:12px 16px;font-size:12px;color:#ef4444;text-align:center;';
+    warn.innerHTML = '⚠️ Open this app inside <strong>Telegram</strong> to use all features.<br>Tap the button in @p2pethiopian_bot';
+    document.querySelector('.hdr').after(warn);
   }
 }
 
