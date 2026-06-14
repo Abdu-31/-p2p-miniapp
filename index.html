@@ -386,14 +386,10 @@ if (tg) {
   try { tg.setHeaderColor('#080c14'); } catch(e) {}
   try { tg.setBackgroundColor('#080c14'); } catch(e) {}
   // Try multiple ways to get user ID
-  TG_ID = tg.initDataUnsafe?.user?.id
-       || tg.initData?.match(/user=%7B%22id%22%3A(\d+)/)?.[1]
-       || null;
+  TG_ID = tg.initDataUnsafe?.user?.id || null;
   TG_USER = tg.initDataUnsafe?.user || {};
   if (TG_ID) TG_ID = String(TG_ID);
 }
-
-console.log('Mini App init - TG_ID:', TG_ID, 'has tg:', !!tg);
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
 function go(name) {
