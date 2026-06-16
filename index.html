@@ -831,7 +831,7 @@ function confirmTradeWithAmt() {
 function confirmTrade(tData) {
   window._currentTrade = typeof tData==='string' ? JSON.parse(tData) : tData;
   confirmTradeWithAmt();
-
+}
 
 // ── RATES ─────────────────────────────────────────────────────────────────────
 async function fetchRates() {
@@ -885,7 +885,148 @@ function updateMktRate() {
   if (r && el) el.textContent = r.toLocaleString('en',{maximumFractionDigits:0})+' ETB';
 }
 
+
+// ── WALLET ────────────────────────────────────────────────────────────────────
+async function loadWalletSilent() {
+  if (!TG_ID) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/wallet?tg_id=${TG_ID}`);
+    if (res.ok) currentWallet = await res.json();
+  } catch {}
+}
+
+async function loadWallet() {
+  if (!TG_ID) {
+    document.getElementById('walletAddresses').innerHTML = '<div class="empty" style="padding:16px">Login via bot first.</div>';
+    return;
+  }
+  if (!currentWallet) await loadWalletSilent();
+  const nets = [
+    {key:'tron_address', net:'TRON', icon:'🔴', coins:'TRX / USDT'},
+    {key:'bsc_address',  net:'BSC',  icon:'🟡', coins:'BNB / USDT'},
+    {key:'eth_address',  net:'ETH',  icon:'🔵', coins:'ETH / USDT'},
+    {key:'ton_address',  net:'TON',  icon:'💎', coins:'TON'},
+  ];
+  const el = document.getElementById('walletAddresses');
+  if (!el) return;
+  el.innerHTML = nets.map(n => {
+    const addr = currentWallet?.[n.key] || null;
+    const short = addr ? addr.slice(0,12)+'...'+addr.slice(-6) : 'Not generated';
+    return `<div class="net-row" onclick="showAddr('${n.net}','${n.key}','${n.icon}','${n.coins}')">
+      <div style="display:flex;align-items:center">
+        <span class="net-icon">${n.icon}</span>
+        <div><div class="net-name">${n.net}</div>
+        <div class="net-coins">${addr ? short : '⚠️ '+n.coins+' — tap to view'}</div></div>
+      </div>
+      <span style="color:var(--muted2)">›</span>
+    </div>`;
+  }).join('');
+}
+
+async function showAddr(network, key, icon, coins) {
+  goTo('dep-addr');
+  const titleEl = document.getElementById('dAddrTitle');
+  const iconEl  = document.getElementById('dAddrIcon');
+  const coinsEl = document.getElementById('dAddrCoins');
+  const addrEl  = document.getElementById('dAddr');
+  const warnEl  = document.getElementById('dWarn');
+  if (titleEl) titleEl.textContent = 'Deposit — ' + network;
+  if (iconEl)  iconEl.textContent  = icon;
+  if (coinsEl) coinsEl.textContent = coins;
+  if (addrEl)  addrEl.textContent  = 'Loading...';
+  const warns = {
+    TRON:'⚠️ Only send TRX or USDT (TRC20). Min: 1 USDT. 20 confirmations.',
+    BSC: '⚠️ Only send BNB or USDT (BEP20). Min: 0.01 BNB. 15 confirmations.',
+    ETH: '⚠️ Only send ETH or USDT (ERC20). Min: 0.005 ETH. 12 confirmations.',
+    TON: '⚠️ Only send TON. Min: 1 TON. 5 confirmations.',
+  };
+  if (warnEl) warnEl.textContent = warns[network] || '';
+  if (!currentWallet && TG_ID) await loadWalletSilent();
+  const addr = currentWallet?.[key];
+  if (addrEl) addrEl.textContent = addr || 'Register via /start in bot first';
+}
+
+function copyAddr() {
+  const addrEl = document.getElementById('dAddr');
+  const addr = addrEl ? addrEl.textContent : '';
+  if (!addr || addr.includes('Register') || addr.includes('Loading')) {
+    showToast('⚠️ No address yet','err'); return;
+  }
+  copyText(addr);
+}
+
+async function loadWdBals() {
+  const el = document.getElementById('wdBals');
+  if (!el) return;
+  if (!TG_ID || !currentWallet) { el.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:12px">Login via bot first.</div>'; return; }
+  el.innerHTML = ['TRON','BSC','ETH','TON'].map(net => {
+    const icons = {TRON:'🔴',BSC:'🟡',ETH:'🔵',TON:'💎'};
+    const coins = {TRON:'TRX/USDT',BSC:'BNB/USDT',ETH:'ETH/USDT',TON:'TON'};
+    return `<div class="hist-item">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:20px">${icons[net]}</span>
+        <div><div style="font-weight:600;font-size:13px">${net}</div>
+        <div style="font-size:9px;color:var(--muted2)">${coins[net]}</div></div>
+      </div>
+      <div><div style="font-weight:700;color:var(--accent);font-size:13px">0.00</div>
+      <div style="font-size:9px;color:var(--muted2)">Available</div></div>
+    </div>`;
+  }).join('');
+}
+
+// ── KYC STATUS ────────────────────────────────────────────────────────────────
+async function loadKYCStatus() {
+  if (!TG_ID) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/kyc?tg_id=${TG_ID}`);
+    if (!res.ok) return;
+    const kyc = await res.json();
+    const card = document.getElementById('kycCard');
+    const btn  = document.getElementById('kycBtn');
+    const desc = document.getElementById('kycDesc');
+    if (!card) return;
+    if (kyc.status === 'approved') {
+      card.style.background = 'linear-gradient(135deg,rgba(0,229,160,0.1),rgba(0,229,160,0.05))';
+      card.style.borderColor = 'rgba(0,229,160,0.3)';
+      if (desc) desc.innerHTML = '✅ <strong style="color:var(--accent)">Identity Verified!</strong><br>You have a ✅ badge on your profile.';
+      if (btn)  btn.style.display = 'none';
+    } else if (kyc.status === 'pending') {
+      if (desc) desc.innerHTML = '⏳ <strong style="color:var(--accent2)">KYC Under Review</strong><br>Usually approved within 24 hours.';
+      if (btn)  { btn.textContent = '⏳ Pending Review'; btn.disabled = true; btn.style.opacity = '0.6'; }
+    }
+  } catch {}
+}
+
+function startKYC() {
+  showToast('📱 Opening KYC in bot...','ok');
+  if (tg) tg.openTelegramLink('https://t.me/p2pethiopian_bot?start=kyc');
+  else window.location.href = 'https://t.me/p2pethiopian_bot?start=kyc';
+}
+
+function sendToBot(action) {
+  showToast('📱 Opening bot...','ok');
+  if (tg) tg.openTelegramLink(`https://t.me/p2pethiopian_bot?start=${action}`);
+  else window.location.href = `https://t.me/p2pethiopian_bot?start=${action}`;
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function showToast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.className = `toast ${type}`, 2500);
+}
+
+function fmtVol(n) {
+  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+  if (n >= 1e3) return (n/1e3).toFixed(0)+'K';
+  return n.toFixed(0);
+}
+
 // ── START ─────────────────────────────────────────────────────────────────────
 init();
 setInterval(fetchRates, 300000);
-}
+</script>
+</body>
+</html>
